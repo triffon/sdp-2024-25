@@ -14,6 +14,10 @@ private:
     T data[MAX];
     // индекс на върха на стека
     int top;
+
+    bool full() const {
+        return top == MAX - 1;
+    }
 public:
     Stack() : top(EMPTY_STACK) {}
 
@@ -24,6 +28,8 @@ public:
 
     // включване на елемент в стек
     void push(T const& x) {
+        if (full())
+            throw std::runtime_error("Опит за включване в пълен стек");
         data[++top] = x;
     }
 

@@ -39,3 +39,10 @@ TEST_CASE_TEMPLATE("Several elements pushed on the stack are removed in reverse 
     CHECK(s.pop() == 2);
     CHECK(s.pop() == 1);
 }
+
+TEST_CASE("An exception is thrown if trying to push an element on a full stack") {
+    Stack<int> s;
+    for (int i = 0; i < Stack<int>::MAX; i++)
+        s.push(i);
+    CHECK_THROWS(s.push(42));
+}
