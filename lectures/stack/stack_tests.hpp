@@ -1,7 +1,8 @@
 #include "doctest.h"
 #include "stack.hpp"
+#include "resizing_stack.hpp"
 
-#define STACKS Stack<int>
+#define STACKS Stack<int>, ResizingStack<int>
 
 TEST_CASE_TEMPLATE("A stack created by default is empty", SomeStack, STACKS) {
     SomeStack s;
