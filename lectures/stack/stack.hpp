@@ -1,5 +1,12 @@
+#ifndef SDP_STACK_STACK_HPP
+#define SDP_STACK_STACK_HPP
+
 #include <stdexcept>
 
+/// @brief Клас за структурата от данни Стек
+/// Темплетйтни стойности:
+/// Т - типа на променливата, която искаме да пазим в стека
+///
 template <typename T>
 class Stack {
 public:
@@ -7,43 +14,46 @@ public:
     static const size_t MAX = 100;
 
     // означение, че стекът е празен
-    static const int EMPTY_STACK = -1;
+    static const size_t EMPTY_STACK = 0;
 
 private:
     // елементите на стека
     T data[MAX];
+
     // индекс на върха на стека
-    int top;
+    size_t number_of_elements;
 
     bool full() const {
-        return top == MAX - 1;
+        return number_of_elements == MAX;
     }
 public:
-    Stack() : top(EMPTY_STACK) {}
+    Stack() : number_of_elements(EMPTY_STACK) {}
 
     // проверка дали стек е празен
     bool empty() const {
-        return top == EMPTY_STACK;
+        return number_of_elements == EMPTY_STACK;
     }
 
     // включване на елемент в стек
     void push(T const& x) {
         if (full())
             throw std::runtime_error("Опит за включване в пълен стек");
-        data[++top] = x;
+        data[number_of_elements++] = x;
     }
 
     // изключване на елемент от стек
     T pop() {
         if (empty())
             throw std::runtime_error("Опит за изключване от празен стек");
-        return data[top--];
+        return data[--number_of_elements];
      }
 
     // поглеждане на елемента на върха на стека
     T const& peek() const { 
         if (empty())
             throw std::runtime_error("Опит за поглеждане в празен стек");
-        return data[top];
+        return data[number_of_elements];
      }
 };
+
+#endif
