@@ -8,12 +8,9 @@ private:
             else
               // array[left] не си е на мястото
               if (array[right] >= pivot) right--;
-              else {
+              else
                 // array[right] не си е на мястото, да ги разменим!
                 std::swap(array[left], array[right]);
-                left++;
-                right--;
-              }
         }
         // left == right
         // array[left] == array[right] на в коя част трябва да е?
@@ -27,13 +24,16 @@ private:
     }
 public:
     static void sort(int array[], size_t n) {
+        if (n <= 1)
+            return;
+
         // 1. Избираме елемент от масива (``ос'')
         int& pivot = array[0];
 
         // 2. Разделяме масива на две части:
         //   - елементи по-малки от оста
         //   - елементи по-големи или равни на оста
-        int pivot_index = partition(array + 1, n - 1, pivot);
+        int pivot_index = partition(array + 1, n - 1, pivot) + 1;
 
         // 3. поставяме оста между двете части на масива
         std::swap(pivot, array[pivot_index]);
