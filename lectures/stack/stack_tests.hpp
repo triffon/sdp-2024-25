@@ -4,34 +4,34 @@
 
 #define STACKS Stack<int>, ResizingStack<int>
 
-TEST_CASE_TEMPLATE("A stack created by default is empty", SomeStack, STACKS) {
+TEST_CASE_TEMPLATE("Стек, създаден по подразбиране, е празен", SomeStack, STACKS) {
     SomeStack s;
     CHECK(s.empty());
 }
 
-TEST_CASE_TEMPLATE("After pushing an element on a stack it is no longer empty", SomeStack, STACKS) {
+TEST_CASE_TEMPLATE("След включване на елемент в стека, той вече не е празен", SomeStack, STACKS) {
     SomeStack s;
     s.push(42);
     CHECK(!s.empty());
 }
 
-TEST_CASE_TEMPLATE("Attempt to pop from an empty stack throws an exception", SomeStack, STACKS) {
+TEST_CASE_TEMPLATE("Опит за изключване от празен стек хвърля изключение", SomeStack, STACKS) {
     SomeStack s;
     CHECK_THROWS(s.pop());
 }
 
-TEST_CASE_TEMPLATE("Attempt to peek from an empty stack throws an exception", SomeStack, STACKS) {
+TEST_CASE_TEMPLATE("Опит за поглеждане в празен стек хвърля изключение", SomeStack, STACKS) {
     SomeStack s;
     CHECK_THROWS(s.peek());
 }
 
-TEST_CASE_TEMPLATE("An pushed element can be popped from the stack", SomeStack, STACKS) {
+TEST_CASE_TEMPLATE("Включен елемент може да бъде изключен веднага от стека", SomeStack, STACKS) {
     SomeStack s;
     s.push(42);
     CHECK(s.pop() == 42);
 }
 
-TEST_CASE_TEMPLATE("Several elements pushed on the stack are removed in reverse order", SomeStack, STACKS) {
+TEST_CASE_TEMPLATE("Няколко включени елемента в стека се изключват в обратен ред", SomeStack, STACKS) {
     SomeStack s;
     s.push(1);
     s.push(2);
@@ -41,7 +41,7 @@ TEST_CASE_TEMPLATE("Several elements pushed on the stack are removed in reverse 
     CHECK(s.pop() == 1);
 }
 
-TEST_CASE("An exception is thrown if trying to push an element on a full stack") {
+TEST_CASE("Хвърля се изключение при опит за добавяне на елемент в пълен стек") {
     Stack<int> s;
     for (int i = 0; i < Stack<int>::MAX; i++)
         s.push(i);
