@@ -1,8 +1,9 @@
 #include <algorithm>
 #include "doctest.h"
 #include "bubblesorter.hpp"
+#include "quicksorter.hpp"
 
-#define SORTERS BubbleSorter
+#define SORTERS BubbleSorter, QuickSorter
 
 TEST_CASE_TEMPLATE("Test sorter with custom array", Sorter, SORTERS) {
     int array[] = {5, 3, 1, 2, 4};
