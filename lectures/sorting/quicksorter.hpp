@@ -1,3 +1,6 @@
+#ifndef __QUICKSORTER_HPP
+#define __QUICKSORTER_HPP
+
 #include <utility>
 class QuickSorter {
 private:
@@ -43,3 +46,5 @@ public:
         sort(array + pivot_index + 1, n - pivot_index - 1);
     }
 };
+
+#endif
