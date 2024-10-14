@@ -1,9 +1,10 @@
 #include <algorithm>
 #include "doctest.h"
+#include "alternative_quicksorter.hpp"
 #include "bubblesorter.hpp"
 #include "quicksorter.hpp"
 
-#define SORTERS BubbleSorter, QuickSorter
+#define SORTERS BubbleSorter, QuickSorter, AlternativeQuicksorter<int> 
 
 TEST_CASE_TEMPLATE("Сортиране на фиксиран масив", Sorter, SORTERS) {
     int array[] = {5, 3, 1, 2, 4};
