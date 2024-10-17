@@ -12,9 +12,45 @@ class LinkedStack {
 private:
     // указател към върха на стека
     StackElement<T>* top;
+
+    // копира верига от двойни кутии
+    void copy(LinkedStack const& ls) {
+        if (ls.empty())
+            top = nullptr;
+        else {
+            // копиране на първия елемент
+            top = new StackElement<T>{ ls.top->data, nullptr };
+            StackElement<T> *toCopy = ls.top->next, *lastCopied = top;
+            while(toCopy != nullptr) {
+                lastCopied->next = new StackElement<T>{ toCopy->data, nullptr };
+                toCopy = toCopy->next;
+                lastCopied = lastCopied->next;
+            }
+        }
+    }
+
+    void erase() {
+        while(!empty())
+            pop();
+    }
 public:
 
     LinkedStack() : top(nullptr) {}
+    LinkedStack(LinkedStack const& ls) : top(nullptr) {
+        copy(ls);
+    }
+
+    LinkedStack& operator=(LinkedStack const& ls) {
+        if (this != &ls) {
+            erase();
+            copy(ls);
+        }
+        return *this;
+    }
+
+    ~LinkedStack() {
+        erase();
+    }
 
     // проверка дали стек е празен
     bool empty() const {
