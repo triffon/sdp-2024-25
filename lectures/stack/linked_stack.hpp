@@ -1,5 +1,6 @@
 #ifndef LINKED_STACK_HPP
 #define LINKED_STACK_HPP
+#include <stdexcept>
 
 template <typename T>
 struct StackElement {
