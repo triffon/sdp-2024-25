@@ -23,23 +23,25 @@ public:
 
     // включване на елемент в стек
     void push(T const& x) {
-/*         if (full())
-            throw std::runtime_error("Опит за включване в пълен стек");
-        data[++top] = x; */
+        top = new StackElement<T>{x, top};
     }
 
     // изключване на елемент от стек
     T pop() {
         if (empty())
             throw std::runtime_error("Опит за изключване от празен стек");
-        /* return data[top--]; */
+        StackElement<T>* toDelete = top;
+        T result = top->data;
+        top = top->next;
+        delete toDelete;
+        return result;
     } 
 
     // поглеждане на елемента на върха на стека
     T const& peek() const { 
         if (empty())
             throw std::runtime_error("Опит за поглеждане в празен стек");
-        // return data[top];
+        return top->data;
     }
 };
 
