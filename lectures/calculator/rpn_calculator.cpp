@@ -8,7 +8,10 @@ double RPNCalculator::applyOperation(char op, double left_arg, double right_arg)
         case '+': return left_arg + right_arg;
         case '-': return left_arg - right_arg;
         case '*': return left_arg * right_arg;
-        case '/': return left_arg / right_arg;
+        case '/':
+            if (right_arg == 0)
+                throw std::invalid_argument("Опит за деление на 0");
+            return left_arg / right_arg;
         case '^': return pow(left_arg, right_arg);
         default: throw std::invalid_argument("Невалидна операция");
     }

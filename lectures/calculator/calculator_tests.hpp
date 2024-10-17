@@ -15,3 +15,8 @@ TEST_CASE("Пресмятане на аритметичния израз от с
     RPNCalculator calc;
     CHECK_EQ(calc.calculate("(1+2)*(3-4/5)"), doctest::Approx(6.6));
 }
+
+TEST_CASE("Опит за деление на 0 в израза връща грешка") {
+    RPNCalculator calc;
+    CHECK_THROWS_AS(calc.calculate("1/0"), std::invalid_argument);
+}
