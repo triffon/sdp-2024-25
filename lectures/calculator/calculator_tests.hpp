@@ -20,3 +20,13 @@ TEST_CASE("Опит за деление на 0 в израза връща гре
     RPNCalculator calc;
     CHECK_THROWS_AS(calc.calculate("1/0"), std::invalid_argument);
 }
+
+TEST_CASE("Преобразуване на втория израз от слайдовете в обратен полски запис") {
+    RPNCalculator calc;
+    CHECK_EQ(calc.convertToRPN("(1+2)*(3/4-5)"), "12+34/5-*");
+}
+
+TEST_CASE("Пресмятане на аритметичния израз от слайдовете") {
+    RPNCalculator calc;
+    CHECK_EQ(calc.calculate("(1+2)*(3/4-5)"), doctest::Approx(-12.75));
+}

@@ -39,14 +39,37 @@ std::string RPNCalculator::convertToRPN(std::string const& expr) {
             // c е цифра, записваме я в резултата
             rpn += c;
         else if (c == ')') {
+            // c е затваряща скоба, изваждаме всички операции до отваряща скоба
             while (ops.peek() != '(')
                 rpn += ops.pop();
             // изваждане на отварящата скоба от стека
             ops.pop();
-        } else
-            // c е отваряща скоба или операция, записваме я в стека с операции
+        } else if (c == '(')
+            // c е отваряща скоба, добавяме я в стека
             ops.push(c);
+        else {
+            // c е операция, записваме я в стека с операции,
+            // но преди това тя избутва всички останали операции с по-висок или равен приоритет
+            while (!ops.empty() && ops.peek() != '(' && priority(ops.peek()) >= priority(c))
+                rpn += ops.pop();
+            ops.push(c);
+        }
     while (!ops.empty())
         rpn += ops.pop();
     return rpn;
+}
+
+int RPNCalculator::priority(char op) {
+    switch(op) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        case '^':
+            return 3;
+
+        default: throw std::invalid_argument("Невалидна операция");
+    }  
 }

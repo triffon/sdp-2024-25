@@ -11,6 +11,7 @@ class RPNCalculator {
     OperationStack ops;
     static double digitValue(char digit) { return digit - '0'; }
     static double applyOperation(char op, double left_arg, double right_arg);
+    static int priority(char op);
 public:
     double calculateRPN(std::string const& rpn);
     std::string convertToRPN(std::string const& expr);
