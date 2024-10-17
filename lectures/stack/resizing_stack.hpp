@@ -20,13 +20,32 @@ private:
     bool full() const {
         return top == capacity - 1;
     }
+
+    void copy(ResizingStack const& rs) {
+        top = rs.top;
+        capacity = rs.capacity;
+        data = new T[capacity];
+        for (int i = 0; i <= top; i++)
+            data[i] = rs.data[i];
+    }
 public:
     ResizingStack() : top(EMPTY_STACK), capacity(INITIAL_CAPACITY) {
         data = new T[capacity];
     }
+    ResizingStack(ResizingStack const& rs) {
+        copy(rs);
+    }
+    ResizingStack& operator=(ResizingStack const& rs) {
+        if (this != &rs) {
+            delete[] data;
+            copy(rs);
+        }
+        return *this;
+    }
     ~ResizingStack() {
         delete[] data;
     }
+    // TODO: move конструктор и оператор
 
     // проверка дали стек е празен
     bool empty() const {
