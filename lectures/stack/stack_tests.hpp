@@ -1,8 +1,9 @@
 #include "doctest.h"
 #include "stack.hpp"
 #include "resizing_stack.hpp"
+#include "linked_stack.hpp"
 
-#define STACKS Stack<int>, ResizingStack<int>
+#define STACKS Stack<int>, ResizingStack<int>, LinkedStack<int>
 
 TEST_CASE_TEMPLATE("Стек, създаден по подразбиране, е празен", SomeStack, STACKS) {
     SomeStack s;
