@@ -21,12 +21,25 @@ private:
         return top == capacity - 1;
     }
 
+    void copyData(T* other_data) {
+        for (int i = 0; i <= top; i++)
+            data[i] = other_data[i];
+    }
+
     void copy(ResizingStack const& rs) {
         top = rs.top;
         capacity = rs.capacity;
         data = new T[capacity];
-        for (int i = 0; i <= top; i++)
-            data[i] = rs.data[i];
+        copyData(rs.data);
+    }
+
+    void resize() {
+        capacity *= 2;
+        std::clog << "Разширяваме стека до големина " << capacity << std::endl;
+        T* old_data = data;
+        data = new T[capacity];
+        copyData(old_data);
+        delete[] old_data;
     }
 public:
     ResizingStack() : top(EMPTY_STACK), capacity(INITIAL_CAPACITY) {
@@ -53,9 +66,11 @@ public:
     }
 
     // включване на елемент в стек
+    // сложност в най-лошия случай: O(n)
+    // амортизирана сложност в средния случай: O(1)
     void push(T const& x) {
         if (full())
-            throw std::runtime_error("Опит за включване в пълен стек");
+            resize();
         data[++top] = x;
     }
 

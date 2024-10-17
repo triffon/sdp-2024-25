@@ -88,3 +88,11 @@ TEST_CASE_TEMPLATE("Проверка дали промяна на присвое
         CHECK(s1.pop() == 2);
     }
 }
+
+TEST_CASE_TEMPLATE("Включване на числата от 1 до 100 в стек ги извлича в обратен ред", SomeStack, STACKS) {
+    SomeStack s;
+    for (int i = 1; i <= 100; i++)
+        s.push(i);
+    for (int i = 100; i >= 1; i--)
+        CHECK(s.pop() == i);
+}
