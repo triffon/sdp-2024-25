@@ -71,7 +71,27 @@
 			"stop_token": "cpp",
 			"streambuf": "cpp",
 			"thread": "cpp",
-			"typeinfo": "cpp"
+			"typeinfo": "cpp",
+			"xstring": "cpp",
+			"xutility": "cpp",
+			"charconv": "cpp",
+			"format": "cpp",
+			"ios": "cpp",
+			"list": "cpp",
+			"locale": "cpp",
+			"xfacet": "cpp",
+			"xhash": "cpp",
+			"xiosbase": "cpp",
+			"xlocale": "cpp",
+			"xlocbuf": "cpp",
+			"xlocinfo": "cpp",
+			"xlocmes": "cpp",
+			"xlocmon": "cpp",
+			"xlocnum": "cpp",
+			"xloctime": "cpp",
+			"xmemory": "cpp",
+			"xtr1common": "cpp",
+			"xtree": "cpp"
 		}
 	}
 }

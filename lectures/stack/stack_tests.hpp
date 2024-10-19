@@ -4,6 +4,8 @@
 #include "linked_stack.hpp"
 
 #define STACKS Stack<int>, ResizingStack<int>, LinkedStack<int>
+#define MOVEABLE_STACKS ResizingStack<int>, LinkedStack<int>
+
 
 TEST_CASE_TEMPLATE("Стек, създаден по подразбиране, е празен", SomeStack, STACKS) {
     SomeStack s;
@@ -87,6 +89,57 @@ TEST_CASE_TEMPLATE("Проверка дали промяна на присвое
         s2.pop();
         s2.push(3);
         CHECK(s1.pop() == 2);
+    }
+}
+
+TEST_CASE_TEMPLATE("Проверка за самоприсвояване чрез копиране", SomeStack, STACKS) {
+    SomeStack s;
+    s.push(1);
+    s.push(2);
+
+    s = s;
+
+    CHECK(s.pop() == 2);
+    CHECK(s.pop() == 1);
+    CHECK(s.empty());
+}
+
+TEST_CASE_TEMPLATE("Проверка за самоприсвояване чрез преместване", SomeStack, MOVEABLE_STACKS) {
+    SomeStack s;
+    s.push(1);
+    s.push(2);
+
+    s = std::move(s);
+
+    CHECK(s.pop() == 2);
+    CHECK(s.pop() == 1);
+    CHECK(s.empty());
+}
+
+TEST_CASE_TEMPLATE("Проверка дали преместването нa стек на мястото на друг стек e успешно", SomeStack, MOVEABLE_STACKS) {
+    SomeStack dummy;
+    dummy.push(1);
+    dummy.push(2);
+
+    SUBCASE("Проверка на Move constructor") {
+        SomeStack s(std::move(dummy));
+        CHECK(s.pop() == 2);
+        CHECK(s.pop() == 1);
+        CHECK(s.empty());
+        CHECK_THROWS(dummy.peek());
+        CHECK_THROWS(dummy.pop());
+    }
+
+    SUBCASE("Проверка на Move assignment operator") {
+        SomeStack s;
+        s.push(3);
+        s.push(4);
+        s = std::move(dummy);
+        CHECK(s.pop() == 2);
+        CHECK(s.pop() == 1);
+        CHECK(s.empty());
+        CHECK_THROWS(dummy.peek());
+        CHECK_THROWS(dummy.pop());
     }
 }
 
