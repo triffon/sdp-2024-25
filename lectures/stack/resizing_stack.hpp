@@ -78,7 +78,14 @@ public:
     T pop() {
         if (empty())
             throw std::runtime_error("Опит за изключване от празен стек");
-        return data[top--];
+        
+        T topEl = data[top--];
+
+        if (top > 0 && top < capacity / 4) {
+            resize(std::max(capacity / 2, 1));
+        }
+
+        return topEl;
      }
 
     // поглеждане на елемента на върха на стека
