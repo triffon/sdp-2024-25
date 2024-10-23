@@ -49,6 +49,20 @@ public:
         return *this;
     }
 
+    LinkedStack(LinkedStack && other){
+        this->next=other.next;     //moje da se iznese v move funkciq, no go napisah taka, za da e po-qsno 
+        other.next=nullptr;
+    }
+
+    LinkedStack& operator=(LinkedStack && other){
+        if(this!=&other){
+            erase();
+            this->next=other.next;
+            other.next = nullptr;
+        }
+        return *this;  
+    }
+
     ~LinkedStack() {
         erase();
     }
