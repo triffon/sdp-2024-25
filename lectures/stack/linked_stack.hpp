@@ -68,7 +68,7 @@ public:
         if (empty())
             throw std::runtime_error("Опит за изключване от празен стек");
         StackElement<T>* toDelete = top;
-        T result = top->data;
+        T result = peek();
         top = top->next;
         delete toDelete;
         return result;

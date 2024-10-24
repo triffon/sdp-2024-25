@@ -12,19 +12,38 @@ class LinkedQueue {
 private:
     QueueElement<T> *front, *back;
 public:
-    LinkedQueue() { throw std::runtime_error("Не е реализирано"); }
+    LinkedQueue() : front(nullptr), back(nullptr) { }
 
     // проверка дали опашката е празна
-    bool empty() const { throw std::runtime_error("Не е реализирано"); }
+    bool empty() const { return front == nullptr; }
 
     // включване на елемент в опашката 
-    void enqueue(T const& x) { throw std::runtime_error("Не е реализирано"); }
+    void enqueue(T const& x) { 
+        QueueElement<T> *newback = new QueueElement<T>{x, nullptr};
+        if (empty())
+            front = newback;
+        else
+            back->next = newback;
+        back = newback;
+    }
 
     // изключване на елемент от опашката
-    T dequeue() { throw std::runtime_error("Не е реализирано"); }
+    T dequeue() {
+        if (empty())
+            throw std::runtime_error("Опит за изключване от празна опашка");
+        QueueElement<T>* toDelete = front;
+        T result = head();
+        front = front->next;
+        delete toDelete;
+        return result;
+    }
 
     // първият елемент в опашката
-    T const& head() const { throw std::runtime_error("Не е реализирано"); }
+    T const& head() const { 
+        if (empty())
+            throw std::runtime_error("Опит за поглеждане в празна опашка");
+        return front->data;
+    }
 };
 
 #endif // LINKED_QUEUE_HPP
