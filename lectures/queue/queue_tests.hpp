@@ -41,3 +41,20 @@ TEST_CASE_TEMPLATE("При добавяне на елементи в опашк�
     CHECK(q.dequeue() == 2);
     CHECK(q.dequeue() == 3);
 }
+
+TEST_CASE_TEMPLATE("Многократно включване и изключване на елемент в опашка", Queue, QUEUES) {
+    Queue q;
+    for(int i = 0; i < 1000; i++) {
+        q.enqueue(i);
+        CHECK(q.dequeue() == i);
+    }
+    CHECK(q.empty());
+}
+
+TEST_CASE("Добавяне на MAX - 1 елемента води до изключение за пълна опашка") {
+    StaticQueue<int> q;
+    for(int i = 0; i < StaticQueue<int>::MAX - 1; i++) {
+        q.enqueue(i);
+    }
+    CHECK_THROWS(q.enqueue(0));
+}
