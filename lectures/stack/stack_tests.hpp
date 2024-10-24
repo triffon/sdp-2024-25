@@ -126,7 +126,7 @@ TEST_CASE_TEMPLATE("Проверка дали преместването нa с�
         CHECK(s.pop() == 2);
         CHECK(s.pop() == 1);
         CHECK(s.empty());
-        CHECK_THROWS(dummy.peek());
+        CHECK(dummy.empty());
         CHECK_THROWS(dummy.pop());
     }
 
