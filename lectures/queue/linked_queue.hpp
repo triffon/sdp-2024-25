@@ -15,7 +15,7 @@ public:
     LinkedQueue() : front(nullptr), back(nullptr) { }
 
     // проверка дали опашката е празна
-    bool empty() const { return front == nullptr; }
+    bool empty() const { return front == nullptr && back == nullptr; }
 
     // включване на елемент в опашката 
     void enqueue(T const& x) { 
@@ -35,6 +35,9 @@ public:
         T result = head();
         front = front->next;
         delete toDelete;
+        // добра практика, макар и незадължително в случая, е да нулираме back
+        if (front == nullptr)
+            back = nullptr;
         return result;
     }
 
