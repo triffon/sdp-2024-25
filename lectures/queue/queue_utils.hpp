@@ -23,5 +23,12 @@ public:
         queue.dequeue();
         return currentmin;
     }
+
+    static Queue<T> sort(Queue<T> queue) {
+        Queue<T> result;
+        while (!queue.empty())
+            result.enqueue(min(queue));
+        return result;
+    }
 };
 #endif // QUEUE_UTILS_HPP
