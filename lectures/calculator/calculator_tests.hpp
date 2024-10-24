@@ -30,3 +30,19 @@ TEST_CASE("Пресмятане на аритметичния израз от с
     RPNCalculator calc;
     CHECK_EQ(calc.calculate("(1+2)*(3/4-5)"), doctest::Approx(-12.75));
 }
+
+TEST_CASE("Пресмятане на аритметичния израз, който има грешен брой скоби") {
+    RPNCalculator calc;
+    CHECK_THROWS_AS(calc.calculate("(1+2)*(3/4-5))"), std::invalid_argument);
+    CHECK_THROWS_AS(calc.calculate("((1+2)*(3/4-5)"), std::invalid_argument);
+}
+TEST_CASE("Пресмятане на аритметичния израз, който има грешен брой последователни цифри или има не цели числа") {
+    RPNCalculator calc;
+    CHECK_THROWS_AS(calc.calculate("(1+2)*(3/4-5.0)"), std::invalid_argument);
+    CHECK_THROWS_AS(calc.calculate("(1+2)*(3/4-55)"), std::invalid_argument);
+}
+
+TEST_CASE("Пресмятане на аритметичния израз, който има грешен брой последователни операции") {
+    RPNCalculator calc;
+    CHECK_THROWS_AS(calc.calculate("(1+2)**(3/4-5.0)"), std::invalid_argument);
+}
