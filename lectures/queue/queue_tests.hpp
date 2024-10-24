@@ -59,3 +59,50 @@ TEST_CASE("Добавяне на MAX - 1 елемента води до изкл
     }
     CHECK_THROWS(q.enqueue(0));
 }
+
+TEST_CASE_TEMPLATE("Проверка дали промяна на копирана опашка не засяга оригинала", Queue, QUEUES) {
+    Queue q1;
+    q1.enqueue(1);
+    q1.enqueue(2);
+    Queue q2 = q1;
+
+    SUBCASE("Присвоената опашка e същата като оригинала") {
+        CHECK(q2.dequeue() == 1);
+        CHECK(q2.dequeue() == 2);
+        CHECK(q2.empty());
+    }
+
+    SUBCASE("Промяна по копираната опашка не променя оригинала") {
+        q2.enqueue(3);
+        CHECK(q1.dequeue() == 1);
+        CHECK(q1.dequeue() == 2);
+        CHECK(q1.empty());
+        CHECK_THROWS(q1.dequeue());
+    }
+}
+
+TEST_CASE_TEMPLATE("Проверка дали промяна на присвоена опашка не засяга оригинала", Queue, QUEUES) {
+    Queue q1;
+    q1.enqueue(1);
+    q1.enqueue(2);
+
+    Queue q2;
+    q2.enqueue(-1);
+    q2.enqueue(-2);
+
+    q2 = q1;
+
+    SUBCASE("Присвоената опашка e същата като оригинала") {
+        CHECK(q2.dequeue() == 1);
+        CHECK(q2.dequeue() == 2);
+        CHECK(q2.empty());
+    }
+
+    SUBCASE("Промяна по присвоената опашка не променя оригинала") {
+        q2.enqueue(3);
+        CHECK(q1.dequeue() == 1);
+        CHECK(q1.dequeue() == 2);
+        CHECK(q1.empty());
+        CHECK_THROWS(q1.dequeue());
+    }
+}

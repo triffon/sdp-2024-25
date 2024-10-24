@@ -11,8 +11,35 @@ template <typename T>
 class LinkedQueue {
 private:
     QueueElement<T> *front, *back;
+
+    void copy(LinkedQueue const& lq) {
+        QueueElement<T>* toCopy = lq.front;
+        while (toCopy != nullptr) {
+            enqueue(toCopy->data);
+            toCopy = toCopy->next;
+        }
+    }
+
+    void erase() {
+        while(!empty())
+            dequeue();
+    }
+
 public:
     LinkedQueue() : front(nullptr), back(nullptr) { }
+    LinkedQueue(LinkedQueue const& lq) : LinkedQueue() {
+        copy(lq);
+    }
+    LinkedQueue& operator=(LinkedQueue const& lq) {
+        if (this != &lq) {
+            erase();
+            copy(lq);
+        }
+        return *this;
+    }
+    ~LinkedQueue() {
+        erase();
+    }
 
     // проверка дали опашката е празна
     bool empty() const { return front == nullptr && back == nullptr; }
