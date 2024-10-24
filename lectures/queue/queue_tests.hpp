@@ -1,7 +1,8 @@
 #include "doctest.h"
 #include "squeue.hpp"
+#include "linked_queue.hpp"
 
-#define QUEUES StaticQueue<int>
+#define QUEUES StaticQueue<int>, LinkedQueue<int>
 
 TEST_CASE_TEMPLATE("Създаване на празна опашка", Queue, QUEUES) {
     Queue q;
