@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "calculator"
+		},
+		{
+			"path": "queue"
 		}
 	],
 	"settings": {
