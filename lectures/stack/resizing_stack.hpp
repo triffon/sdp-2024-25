@@ -21,7 +21,7 @@ private:
         return top == capacity - 1;
     }
 
-    void copyData(T* other_data) {
+    void copyData(const T* const other_data) {
         for (int i = 0; i <= top; i++)
             data[i] = other_data[i];
     }
@@ -36,7 +36,7 @@ private:
     void resize() {
         capacity *= 2;
         std::clog << "Разширяваме стека до големина " << capacity << std::endl;
-        T* old_data = data;
+        const T* const old_data = data;
         data = new T[capacity];
         copyData(old_data);
         delete[] old_data;
@@ -45,9 +45,11 @@ public:
     ResizingStack() : top(EMPTY_STACK), capacity(INITIAL_CAPACITY) {
         data = new T[capacity];
     }
+
     ResizingStack(ResizingStack const& rs) {
         copy(rs);
     }
+
     ResizingStack& operator=(ResizingStack const& rs) {
         if (this != &rs) {
             delete[] data;
@@ -55,10 +57,33 @@ public:
         }
         return *this;
     }
+
+    ResizingStack(ResizingStack&& rs) noexcept 
+        : top(rs.top), capacity(rs.capacity), data(rs.data) {
+        rs.top = EMPTY_STACK;
+        rs.capacity = INITIAL_CAPACITY;
+        rs.data = nullptr;
+    }
+
+    ResizingStack& operator=(ResizingStack&& rs) noexcept {
+        if(this != &rs) {
+            delete[] data;
+
+            top = rs.top;
+            capacity = rs.capacity;
+            data = rs.data;
+
+            rs.top = EMPTY_STACK;
+            rs.capacity = INITIAL_CAPACITY;
+            rs.data = nullptr;
+        }
+        
+        return *this;    
+    }
+    
     ~ResizingStack() {
         delete[] data;
     }
-    // TODO: move конструктор и оператор
 
     // проверка дали стек е празен
     bool empty() const {
