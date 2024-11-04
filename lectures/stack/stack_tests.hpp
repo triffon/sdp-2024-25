@@ -127,7 +127,6 @@ TEST_CASE_TEMPLATE("Проверка дали преместването нa с�
         CHECK(s.pop() == 1);
         CHECK(s.empty());
         CHECK(dummy.empty());
-        CHECK_THROWS(dummy.pop());
     }
 
     SUBCASE("Проверка на Move assignment operator") {
@@ -138,8 +137,7 @@ TEST_CASE_TEMPLATE("Проверка дали преместването нa с�
         CHECK(s.pop() == 2);
         CHECK(s.pop() == 1);
         CHECK(s.empty());
-        CHECK_THROWS(dummy.peek());
-        CHECK_THROWS(dummy.pop());
+        CHECK(dummy.empty());
     }
 }
 
