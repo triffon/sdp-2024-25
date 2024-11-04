@@ -83,7 +83,7 @@ public:
         if (empty())
             throw std::runtime_error("Опит за изключване от празен стек");
         const StackElement<T>* const toDelete = top;
-        const T result = top->data;
+        const T result = peek();
         top = top->next;
         delete toDelete;
         return result;
