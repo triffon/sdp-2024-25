@@ -8,6 +8,9 @@ struct LinkedListElement {
 };
 
 template <typename T>
+class LinkedList;
+
+template <typename T>
 class LinkedListIterator {
     LinkedListElement<T>* ptr;
 public:
@@ -36,6 +39,8 @@ public:
             throw std::runtime_error("Опит за достъп до елемент на невалидна позиция");
         return ptr->data;
     }
+
+    friend class LinkedList<T>;
 };
 
 template <typename T>
@@ -55,8 +60,8 @@ public:
     I begin() const { return I(front); }
     I end()   const { return I(back);  }
 
-    static T const& get(I const& pos) { return pos.get(); }
-    static T      & get(I      & pos) { return pos.get(); }
+    static T const& get(I const& it) { return it.get(); }
+    static T      & get(I      & it) { return it.get(); }
 
     bool insertFirst(T const& el) {
         return insertBefore(el, begin());
@@ -66,12 +71,25 @@ public:
         return insertAfter(el, end());
     }
 
-    bool insertBefore(T const& el, I const& pos) {
+    bool insertBefore(T const& el, I const& it) {
+        if (empty() && !it.valid())
+            // вмъкване на единствената възможна позиция
+            return insertLast(el);
         throw std::runtime_error("Не е реализирана");
     }
 
-    bool insertAfter (T const& el, I const& pos) {
-        throw std::runtime_error("Не е реализирана");
+    bool insertAfter (T const& el, I const& it) {
+        if (!it.valid()) {
+            if (empty()) {
+                // ок, вмъкваме на едниственото възможно място
+                front = back = new E{el, nullptr};
+                return true;
+            }
+            return false;
+        }
+        E* newElement = new E{el, it.ptr->next};
+        it.ptr->next = newElement;
+        return true;
     }
 
     bool deleteFirst(T& el) {
@@ -82,15 +100,15 @@ public:
         return deleteAfter(el, end());
     }
 
-    bool deleteBefore(T& el, I const& pos) {
+    bool deleteBefore(T& el, I const& it) {
         throw std::runtime_error("Не е реализирана");
     }
 
-    bool deleteAt    (T& el, I const& pos) {
+    bool deleteAt    (T& el, I const& it) {
         throw std::runtime_error("Не е реализирана");
     }
 
-    bool deleteAfter (T& el, I const& pos) {
+    bool deleteAfter (T& el, I const& it) {
         throw std::runtime_error("Не е реализирана");
     }
     

@@ -11,13 +11,13 @@ TEST_CASE_TEMPLATE("При създаване списък е празен", Som
 TEST_CASE_TEMPLATE("При създаване на списък след вмъквъне на елемент вече не е празен", SomeList, LISTS) {\
     SomeList list;
 
-    SUBCASE("В началото") {
-        list.insertFirst(42);
+    SUBCASE("В края") {
+        list.insertLast(42);
         CHECK(!list.empty());
     }
 
-    SUBCASE("В края") {
-        list.insertLast(42);
+    SUBCASE("В началото") {
+        list.insertFirst(42);
         CHECK(!list.empty());
     }
 }
