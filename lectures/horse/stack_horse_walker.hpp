@@ -7,51 +7,61 @@
 class StackHorseWalker : public HorseWalker {
 private:
     Walk currentWalk;
-    LinkedStack<Position> stack;
+    using StackFrame = LinkedStack<Position>;
+    LinkedStack<StackFrame> stack;
 
 public:
     StackHorseWalker(size_t boardSize) : HorseWalker(boardSize) {}
 
     Walk walk(Position const& start, Position const& end) {
-        stack.push(start);
+        StackFrame initialFrame;
+        initialFrame.push(start);
+        stack.push(initialFrame);
 
         while (!stack.empty()) {
-            Position current = stack.pop();
+            StackFrame& currentFrame = stack.peek();
+            if (!currentFrame.empty()) {
+                Position current = currentFrame.pop();
 
-            // std::clog << "Пробваме да стъпим на " << current << std::endl;
+                // std::clog << "Пробваме да стъпим на " << current << std::endl;
 
-            // проверка дали не сме в лошата база
-            if (insideBoard(current) && !board[current.first][current.second]) {
-                // стъпка напред
-                // std::clog << "Стъпваме на " << current << std::endl;
-                board[current.first][current.second] = true;
-                currentWalk.push_back(current);
+                // проверка дали не сме в лошата база
+                if (insideBoard(current) && !board[current.first][current.second]) {
+                    // стъпка напред
+                    // std::clog << "Стъпваме на " << current << std::endl;
+                    board[current.first][current.second] = true;
+                    currentWalk.push_back(current);
 
-                // добра база
-                if (current == end) {
-                    // std::clog << "Намерихме разходка " << currentWalk;
-                    return currentWalk;
+                    // добра база
+                    if (current == end) {
+                        // std::clog << "Намерихме разходка " << currentWalk;
+                        return currentWalk;
+                    }
+
+                    StackFrame newFrame;
+
+                    // опит за всички възможни ходове на коня
+                    for (int i = -2; i <= 2; i++)
+                        for (int j = -2; j <= 2; j++)
+                            if (i && j && std::abs(i) != std::abs(j)) {
+                                Position next = {current.first + i, current.second + j};
+                                // std::clog << "Ще пробваме да стъпим на " << next << std::endl;
+                                newFrame.push(next);
+                            }
+
+                    stack.push(newFrame);
                 }
-
-                // опит за всички възможни ходове на коня
-                for (int i = -2; i <= 2; i++)
-                    for (int j = -2; j <= 2; j++)
-                        if (i && j && std::abs(i) != std::abs(j)) {
-                            Position next = {current.first + i, current.second + j};
-                            // std::clog << "Ще пробваме да стъпим на " << next << std::endl;
-                            stack.push(next);
-                        }
+            } else {
+                // std::clog << "Стъпка назад!" << std::endl;
+                // стъпка назад
+                currentWalk.pop_back();
+                // махаме празната рамка от стека
+                stack.pop();
             }
         }
 
         return Walk();
     }
-
-/*
-        // стъпка назад
-        currentWalk.pop_back();
-        return false;
-*/
 };
 
 #endif // STACK_HORSE_WALKER_HPP

@@ -95,6 +95,14 @@ public:
             throw std::runtime_error("Опит за поглеждане в празен стек");
         return top->data;
     }
+
+    // поглеждане на елемента на върха на стека
+    T& peek() { 
+        if (empty())
+            throw std::runtime_error("Опит за поглеждане в празен стек");
+        return top->data;
+    }
+
 };
 
 #endif // LINKED_STACK_HPP
