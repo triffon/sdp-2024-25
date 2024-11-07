@@ -156,6 +156,9 @@ public:
         E* toDelete = it.ptr->next;
         it.ptr->next = toDelete->next;
         el = toDelete->data;
+        // проверка дали трябва да актуализираме последния елемент
+        if (toDelete == back)
+            back = it.ptr;
         delete toDelete;
         return true;
     }
