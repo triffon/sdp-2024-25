@@ -72,6 +72,7 @@ class LinkedList {
     using E = LinkedListElement<T>;
     using I = LinkedListIterator<T>;
 
+    // O(n)
     I findPrevious(I const& it) const {
         if (!it.valid())
             return it;
@@ -95,14 +96,17 @@ public:
     static T const& get(I const& it) { return it.get(); }
     static T      & get(I      & it) { return it.get(); }
 
+    // O(1)
     bool insertFirst(T const& el) {
         return insertBefore(el, begin());
     }
 
+    // O(1)
     bool insertLast(T const& el) {
         return insertAfter(el, last());
     }
 
+    // O(n)
     bool insertBefore(T const& el, I const& it) {
         if (!it.valid()) {
             if (empty())
@@ -119,6 +123,7 @@ public:
         return insertAfter(el, findPrevious(it));
     }
 
+    // O(1)
     bool insertAfter (T const& el, I const& it) {
         if (!it.valid()) {
             if (empty()) {
@@ -135,21 +140,25 @@ public:
         return true;
     }
 
+    // O(1)
     bool deleteFirst(T& el) {
         I it = begin();
         return deleteAt(el, it);
     }
 
+    // O(n)
     bool deleteLast(T& el) {
         I it = last();
         return deleteAt(el, it);
     }
 
+    // O(n)
     bool deleteBefore(T& el, I const& it) {
         I prev = findPrevious(it);
         return deleteAt(el, prev);
     }
 
+    // O(n)
     bool deleteAt    (T& el, I& it) {
         bool result = false;
         // изтриване на първия елемент в непразен списък
@@ -168,6 +177,7 @@ public:
         return result;
     }
 
+    // O(1)
     bool deleteAfter (T& el, I const& it) {
         if (empty() || !it.valid() || !it.next().valid())
             // не можем да изтрием от празен списък, след невалидна позиция и след края
