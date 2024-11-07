@@ -84,7 +84,7 @@ public:
 
     LinkedList() : front(nullptr), back(nullptr) {}
 
-    bool empty() const { return front == nullptr; }
+    bool empty() const { return front == nullptr && back == nullptr; }
 
     I begin() const { return I(front); }
     I last()  const { return I(back);  }
@@ -142,11 +142,25 @@ public:
     }
 
     bool deleteBefore(T& el, I const& it) {
-        throw std::runtime_error("Не е реализирана");
+        return deleteAt(el, findPrevious(it));
     }
 
-    bool deleteAt    (T& el, I const& it) {
-        throw std::runtime_error("Не е реализирана");
+    bool deleteAt    (T& el, I& it) {
+        bool result = false;
+        // изтриване на първия елемент
+        if (it == begin()) {
+            el = *it;
+            front = front->next;
+            if (it == last())
+                // изтрили сме последния елемент, нулираме back
+                back = nullptr;
+            delete it.ptr;
+            result = true;
+        } else
+            result = deleteAfter(el, findPrevious(it));
+        // инвалидиране на итератора
+        it = I();
+        return result;
     }
 
     bool deleteAfter (T& el, I const& it) {

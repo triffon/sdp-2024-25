@@ -121,3 +121,47 @@ TEST_CASE_TEMPLATE("В списък с числата от 1 до 10 изтри�
     }
     CHECK_EQ(i, 13);
 }
+
+TEST_CASE_TEMPLATE("Създаване на списък с числата от 1 до 10 и изтриването на всички елементи с deleteAt", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    typename SomeList::Iterator it = list.begin(), nextit;
+    for(int i = 1, j; it; it = nextit, i++) {
+        nextit = it.next();
+        CHECK(list.deleteAt(j, it));
+        CHECK(!it.valid());
+        CHECK_EQ(i, j);
+    }
+
+    CHECK(list.empty());
+}
+
+TEST_CASE_TEMPLATE("Създаване на списък с числата от 1 до 11 и изтриването на всички нечетни елементи с deleteAt", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 11; i++)
+        CHECK(list.insertLast(i));
+
+    typename SomeList::Iterator it = list.begin(), nextit = it.next();
+    for(int i = 1, j; it && nextit; it = nextit, i += 2) {
+        nextit = it.next();
+        if (nextit)
+            nextit = nextit.next();
+        CHECK(list.deleteAt(j, it));
+        CHECK(!it.valid());
+        CHECK_EQ(i, j);
+    }
+
+    CHECK(list.insertFirst(0));
+    CHECK(list.insertLast(12));
+
+    // в списъка са останали само четните елементи от 0 до 12
+    int i = 0;
+    for(int j : list) {
+        CHECK_EQ(i, j);
+        i += 2;
+    }
+    CHECK_EQ(i, 14);
+
+}
