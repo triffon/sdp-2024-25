@@ -191,6 +191,12 @@ public:
         delete toDelete;
         return true;
     }
+
+    void append(LinkedList&& list) {
+        back->next = list.front;
+        back = list.back;
+        list.front = list.back = nullptr;
+    }
     
 };
 

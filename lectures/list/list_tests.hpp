@@ -229,3 +229,20 @@ TEST_CASE_TEMPLATE("Изтриване на всички елементи в с�
 
     CHECK(list.empty());
 }
+
+TEST_CASE_TEMPLATE("Залепване на списък за друг списък", SomeList, LISTS) {
+    SomeList list1, list2;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list1.insertLast(i));
+    for (int i = 11; i <= 20; i++)
+        CHECK(list2.insertLast(i));
+
+    list1.append(std::move(list2));
+
+    CHECK(list2.empty());
+
+    int i = 1;
+    for (int j : list1)
+        CHECK(j == i++);
+    CHECK(i == 21);
+}
