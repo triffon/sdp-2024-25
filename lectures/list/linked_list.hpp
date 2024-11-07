@@ -61,6 +61,8 @@ public:
 
     T&       operator*()       { return get(); }
     T const& operator*() const { return get(); }
+
+    operator bool() const { return valid(); }
 };
 
 template <typename T>
@@ -69,6 +71,13 @@ class LinkedList {
 
     using E = LinkedListElement<T>;
     using I = LinkedListIterator<T>;
+
+    I findPrevious(I const& it) const {
+        I prev = begin();
+        while (prev && prev.next() != it)
+            ++prev;
+        return prev;
+    }
 
 public:
     using Iterator = I;
@@ -93,10 +102,19 @@ public:
     }
 
     bool insertBefore(T const& el, I const& it) {
-        if (empty() && !it.valid())
-            // вмъкване на единствената възможна позиция
-            return insertLast(el);
-        throw std::runtime_error("Не е реализирана");
+        if (!it.valid()) {
+            if (empty())
+                // вмъкване на единствената възможна позиция
+                return insertLast(el);
+            // опит за вмъкване на елемент в непразен списък на невалидна позиция
+            return false;
+        }
+        if (it == begin()) {
+            // непразен списък, на който трябва да вмъкнем елемент в началото
+            front = new E{el, front};
+            return true;
+        }
+        return insertAfter(el, findPrevious(it));
     }
 
     bool insertAfter (T const& el, I const& it) {
