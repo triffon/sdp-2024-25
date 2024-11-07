@@ -74,3 +74,19 @@ TEST_CASE_TEMPLATE("Вмъкване на числата от 1 до 10 в на�
         CHECK(j == i++);
     CHECK(i == 11);
 }
+
+TEST_CASE_TEMPLATE("Създаване на списък с нечетните числа от 1 до 10 и вмъкване на четните числа между тях с insertBefore", SomeList, LISTS) {\
+    SomeList list;
+
+    for (int i = 1; i <= 10; i += 2)
+        CHECK(list.insertLast(i));
+
+    typename SomeList::Iterator it = list.begin().next();
+    for (int i = 2; i <= 8; i += 2, ++it)
+        CHECK(list.insertBefore(i, it));
+
+    int i = 1;
+    for (int j : list)
+        CHECK(j == i++);
+    CHECK(i == 10);
+}
