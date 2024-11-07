@@ -41,6 +41,26 @@ public:
     }
 
     friend class LinkedList<T>;
+
+    /* Синтактична захар */
+    bool operator==(LinkedListIterator const& it) const { return ptr == it.ptr; }
+    bool operator!=(LinkedListIterator const& it) const { return !(*this == it); }
+
+    // префиксен
+    // (++it) = it2
+    LinkedListIterator& operator++() {
+        return *this = next();
+    }
+
+    // постфиксен
+    LinkedListIterator operator++(int) {
+        LinkedListIterator old = *this;
+        ++(*this);
+        return old;
+    }
+
+    T&       operator*()       { return get(); }
+    T const& operator*() const { return get(); }
 };
 
 template <typename T>
@@ -58,7 +78,8 @@ public:
     bool empty() const { return front == nullptr; }
 
     I begin() const { return I(front); }
-    I end()   const { return I(back);  }
+    I last()  const { return I(back);  }
+    I end()   const { return I();      }
 
     static T const& get(I const& it) { return it.get(); }
     static T      & get(I      & it) { return it.get(); }
@@ -68,7 +89,7 @@ public:
     }
 
     bool insertLast(T const& el) {
-        return insertAfter(el, end());
+        return insertAfter(el, last());
     }
 
     bool insertBefore(T const& el, I const& it) {
@@ -89,6 +110,8 @@ public:
         }
         E* newElement = new E{el, it.ptr->next};
         it.ptr->next = newElement;
+        if (it.ptr == back)
+            back = newElement;
         return true;
     }
 
