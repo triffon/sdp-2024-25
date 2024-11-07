@@ -73,6 +73,8 @@ class LinkedList {
     using I = LinkedListIterator<T>;
 
     I findPrevious(I const& it) const {
+        if (!it.valid())
+            return it;
         I prev = begin();
         while (prev && prev.next() != it)
             ++prev;
@@ -142,7 +144,8 @@ public:
     }
 
     bool deleteBefore(T& el, I const& it) {
-        return deleteAt(el, findPrevious(it));
+        I prev = findPrevious(it);
+        return deleteAt(el, prev);
     }
 
     bool deleteAt    (T& el, I& it) {

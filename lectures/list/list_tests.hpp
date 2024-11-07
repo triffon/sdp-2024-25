@@ -174,3 +174,34 @@ TEST_CASE_TEMPLATE("Опит за невалидно изтриване на е�
     list.insertLast(5);
     CHECK(!list.deleteAt(i, invalid));
 }
+
+TEST_CASE_TEMPLATE("Опит за невалидно изтриване на елемент с deleteBefore ", SomeList, LISTS) {
+    SomeList list;
+    int i;
+    CHECK(!list.deleteBefore(i, list.end()));
+    list.insertLast(5);
+    CHECK(!list.deleteBefore(i, list.end()));
+    CHECK(!list.deleteBefore(i, list.begin()));
+}
+
+TEST_CASE_TEMPLATE("В списък с числата от 1 до 10 изтриваме с deleteBefore всички нечетни елементи", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    typename SomeList::Iterator it = list.begin().next();
+    for(int i = 1, j; it; ++it && ++it, i += 2) {
+        CHECK(list.deleteBefore(j, it));
+        CHECK_EQ(i, j);
+    }
+
+    CHECK(list.insertFirst(0));
+
+    // в списъка са останали само четните елементи
+    int i = 0;
+    for(int j : list) {
+        CHECK_EQ(i, j);
+        i += 2;
+    }
+    CHECK_EQ(i, 12);
+}
