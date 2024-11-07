@@ -205,3 +205,27 @@ TEST_CASE_TEMPLATE("В списък с числата от 1 до 10 изтри�
     }
     CHECK_EQ(i, 12);
 }
+
+TEST_CASE_TEMPLATE("Изтриване на всички елементи в списък от 1 до 10 с deleteFirst", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    for(int i = 1, j; list.deleteFirst(j); i++) {
+        CHECK_EQ(i, j);
+    }
+
+    CHECK(list.empty());
+}
+
+TEST_CASE_TEMPLATE("Изтриване на всички елементи в списък от 1 до 10 с deleteLast", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    for(int i = 10, j; list.deleteLast(j); i--) {
+        CHECK_EQ(i, j);
+    }
+
+    CHECK(list.empty());
+}

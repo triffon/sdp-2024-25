@@ -136,11 +136,13 @@ public:
     }
 
     bool deleteFirst(T& el) {
-        return deleteAt(el, begin());
+        I it = begin();
+        return deleteAt(el, it);
     }
 
     bool deleteLast(T& el) {
-        return deleteAt(el, last());
+        I it = last();
+        return deleteAt(el, it);
     }
 
     bool deleteBefore(T& el, I const& it) {
