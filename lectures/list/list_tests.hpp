@@ -165,3 +165,12 @@ TEST_CASE_TEMPLATE("Създаване на списък с числата от 
     CHECK_EQ(i, 14);
 
 }
+
+TEST_CASE_TEMPLATE("Опит за невалидно изтриване на елемент с deleteAt", SomeList, LISTS) {
+    SomeList list;
+    int i;
+    typename SomeList::Iterator invalid = list.end();
+    CHECK(!list.deleteAt(i, invalid));
+    list.insertLast(5);
+    CHECK(!list.deleteAt(i, invalid));
+}

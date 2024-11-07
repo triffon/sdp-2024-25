@@ -147,8 +147,8 @@ public:
 
     bool deleteAt    (T& el, I& it) {
         bool result = false;
-        // изтриване на първия елемент
-        if (it == begin()) {
+        // изтриване на първия елемент в непразен списък
+        if (!empty() && it == begin()) {
             el = *it;
             front = front->next;
             if (it == last())
