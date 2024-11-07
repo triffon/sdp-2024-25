@@ -82,10 +82,33 @@ class LinkedList {
         return prev;
     }
 
+    void copy(LinkedList const& list) {
+        for (T const& el : list)
+            insertLast(el);
+    }
+
+    void erase() {
+        while (!empty())
+            deleteFirst(front->data);
+    }
+
 public:
     using Iterator = I;
 
     LinkedList() : front(nullptr), back(nullptr) {}
+    LinkedList(LinkedList const& list) : front(nullptr), back(nullptr) {
+        copy();
+    }
+    LinkedList& operator=(LinkedList const& list) {
+        if (this != &list) {
+            erase();
+            copy();
+        }
+        return *this;
+    }
+    ~LinkedList() {
+        erase();
+    }
 
     bool empty() const { return front == nullptr && back == nullptr; }
 
