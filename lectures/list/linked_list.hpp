@@ -134,11 +134,11 @@ public:
     }
 
     bool deleteFirst(T& el) {
-        return deleteBefore(el, begin());
+        return deleteAt(el, begin());
     }
 
     bool deleteLast(T& el) {
-        return deleteAfter(el, end());
+        return deleteAt(el, last());
     }
 
     bool deleteBefore(T& el, I const& it) {
@@ -150,7 +150,14 @@ public:
     }
 
     bool deleteAfter (T& el, I const& it) {
-        throw std::runtime_error("Не е реализирана");
+        if (empty() || !it.valid() || !it.next().valid())
+            // не можем да изтрием от празен списък, след невалидна позиция и след края
+            return false;
+        E* toDelete = it.ptr->next;
+        it.ptr->next = toDelete->next;
+        el = toDelete->data;
+        delete toDelete;
+        return true;
     }
     
 };

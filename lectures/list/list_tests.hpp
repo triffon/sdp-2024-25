@@ -90,3 +90,32 @@ TEST_CASE_TEMPLATE("Създаване на списък с нечетните �
         CHECK(j == i++);
     CHECK(i == 10);
 }
+
+TEST_CASE_TEMPLATE("Опит за невалидно изтриване на елемент с deleteAfter ", SomeList, LISTS) {
+    SomeList list;
+    int i;
+    CHECK(!list.deleteAfter(i, list.end()));
+    list.insertLast(5);
+    CHECK(!list.deleteAfter(i, list.end()));
+    CHECK(!list.deleteAfter(i, list.last()));
+}
+
+TEST_CASE_TEMPLATE("В списък с числата от 1 до 10 изтриваме четните числа с deleteAfter", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    typename SomeList::Iterator it = list.begin();
+    for(int i = 2, j; it; ++it, i += 2) {
+        CHECK(list.deleteAfter(j, it));
+        CHECK_EQ(i, j);
+    }
+
+    // в списъка са останали само нечетните елементи
+    int i = 1;
+    for(int j : list) {
+        CHECK_EQ(i, j);
+        i += 2;
+    }
+    CHECK_EQ(i, 11);
+}
