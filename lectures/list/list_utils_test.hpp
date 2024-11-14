@@ -64,3 +64,109 @@ TEST_CASE_TEMPLATE("Обръщане на списък с числата от 1 
         CHECK(j == i--);
     CHECK(i == 0);
 }
+
+TEST_CASE_TEMPLATE("Разделяне на списък с четна дължина на два с приблизително равни дължини", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    SomeList list1, list2;
+    ListUtils<int, SomeList>::split(list, list1, list2);
+
+    // Проверка дали елементите са разпределени в двата списъка без да гледаме дали са в правилния ред
+    // Събираме елементите от двата списъка в множества
+    std::set<int> list1_elements;
+    for (int x : list1)
+        list1_elements.insert(x);
+
+    std::set<int> list2_elements;
+    for (int x : list2)
+        list2_elements.insert(x);
+
+    // Проверяваме дали общото множество от елементи е равно на оригиналния списък
+    std::set<int> all_elements = list1_elements;
+    all_elements.insert(list2_elements.begin(), list2_elements.end());
+
+    std::set<int> original_elements;
+    for (int i = 1; i <= 10; i++)
+        original_elements.insert(i);
+
+    CHECK(all_elements == original_elements);
+
+    // Проверяваме дали списъците list1 и list2 нямат общи елементи
+    for (int x : list1_elements)
+        CHECK(list2_elements.find(x) == list2_elements.end());
+
+    // Проверяваме дали дължините на list1 и list2 се различават с не повече от 1
+    CHECK(std::abs(int(list1_elements.size() - list2_elements.size())) <= 1);
+}
+
+TEST_CASE_TEMPLATE("Разделяне на списък с нечетна дължина на два с приблизително равни дължини", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 11; i++)
+        CHECK(list.insertLast(i));
+
+    SomeList list1, list2;
+    ListUtils<int, SomeList>::split(list, list1, list2);
+
+    // Проверка дали елементите са разпределени в двата списъка без да гледаме дали са в правилния ред
+    // Събираме елементите от двата списъка в множества
+    std::set<int> list1_elements;
+    for (int x : list1)
+        list1_elements.insert(x);
+
+    std::set<int> list2_elements;
+    for (int x : list2)
+        list2_elements.insert(x);
+
+    // Проверяваме дали общото множество от елементи е равно на оригиналния списък
+    std::set<int> all_elements = list1_elements;
+    all_elements.insert(list2_elements.begin(), list2_elements.end());
+
+    std::set<int> original_elements;
+    for (int i = 1; i <= 11; i++)
+        original_elements.insert(i);
+
+    CHECK(all_elements == original_elements);
+
+    // Проверяваме дали списъците list1 и list2 нямат общи елементи
+    for (int x : list1_elements)
+        CHECK(list2_elements.find(x) == list2_elements.end());
+
+    // Проверяваме дали дължините на list1 и list2 се различават с не повече от 1
+    CHECK(std::abs(int(list1_elements.size() - list2_elements.size())) <= 1);
+}
+
+TEST_CASE_TEMPLATE("Разделяне на празен списък", SomeList, LISTS) {
+    SomeList list, list1, list2;
+    ListUtils<int, SomeList>::split(list, list1, list2);
+
+    CHECK(list1.empty());
+    CHECK(list2.empty());
+}
+
+TEST_CASE_TEMPLATE("Разделяне на списък с 1 елемент", SomeList, LISTS) {
+    SomeList list;
+    CHECK(list.insertLast(42));
+
+    SomeList list1, list2;
+    ListUtils<int, SomeList>::split(list, list1, list2);
+
+    CHECK_EQ(*list1.begin(), 42);
+    CHECK_EQ(list1.begin().next(), list1.end());
+    CHECK(list2.empty());
+}
+
+TEST_CASE_TEMPLATE("Разделяне на списък с 2 елемента", SomeList, LISTS) {
+    SomeList list;
+    CHECK(list.insertLast(42));
+    CHECK(list.insertLast(43));
+
+    SomeList list1, list2;
+    ListUtils<int, SomeList>::split(list, list1, list2);
+
+    CHECK_EQ(*list1.begin() + *list2.begin(), 85);
+    CHECK((*list1.begin() == 42 || *list2.begin() == 42));
+    CHECK_EQ(list1.begin().next(), list1.end());
+    CHECK_EQ(list2.begin().next(), list2.end());
+}
