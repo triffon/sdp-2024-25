@@ -96,7 +96,7 @@ public:
     using Iterator = I;
 
     LinkedList() : front(nullptr), back(nullptr) {}
-    LinkedList(LinkedList const& list) : front(nullptr), back(nullptr) {
+    LinkedList(LinkedList const& list) : LinkedList() {
         copy(list);
     }
     LinkedList& operator=(LinkedList const& list) {
@@ -109,6 +109,19 @@ public:
     ~LinkedList() {
         erase();
     }
+
+    LinkedList(LinkedList const&& list) : LinkedList() {
+        append(list);
+    }
+
+    LinkedList& operator=(LinkedList&& list) {
+        if (this != &list) {
+            erase();
+            append(list);
+        }
+        return *this;
+    }
+
 
     bool empty() const { return front == nullptr && back == nullptr; }
 
@@ -216,9 +229,11 @@ public:
     }
 
     void append(LinkedList&& list) {
-        back->next = list.front;
-        back = list.back;
-        list.front = list.back = nullptr;
+        if (!list.empty()) {
+            empty() ? front : back->next = list.front;
+            back = list.back;
+            list.front = list.back = nullptr;
+        }
     }
     
 };
