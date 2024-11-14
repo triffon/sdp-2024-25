@@ -230,7 +230,7 @@ public:
 
     void append(LinkedList&& list) {
         if (!list.empty()) {
-            empty() ? front : back->next = list.front;
+            (empty() ? front : back->next) = list.front;
             back = list.back;
             list.front = list.back = nullptr;
         }

@@ -305,3 +305,33 @@ TEST_CASE_TEMPLATE("Залепване на списък за друг спис�
         CHECK(j == i++);
     CHECK(i == 21);
 }
+
+TEST_CASE_TEMPLATE("Залепване на празен списък към списък", SomeList, LISTS) {
+    SomeList list1, list2;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list1.insertLast(i));
+
+    list1.append(std::move(list2));
+
+    CHECK(list2.empty());
+
+    int i = 1;
+    for (int j : list1)
+        CHECK(j == i++);
+    CHECK(i == 11);
+}
+
+TEST_CASE_TEMPLATE("Залепване на списък към празен списък", SomeList, LISTS) {
+    SomeList list1, list2;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list2.insertLast(i));
+
+    list1.append(std::move(list2));
+
+    CHECK(list2.empty());
+
+    int i = 1;
+    for (int j : list1)
+        CHECK(j == i++);
+    CHECK(i == 11);
+}
