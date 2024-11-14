@@ -228,6 +228,8 @@ public:
         return true;
     }
 
+    // прехвърля елементите на list в нашия списък
+    // O(1) по време и по памет
     void append(LinkedList&& list) {
         if (!list.empty()) {
             (empty() ? front : back->next) = list.front;
