@@ -110,14 +110,14 @@ public:
         erase();
     }
 
-    LinkedList(LinkedList const&& list) : LinkedList() {
-        append(list);
+    LinkedList(LinkedList&& list) : LinkedList() {
+        append(std::move(list));
     }
 
     LinkedList& operator=(LinkedList&& list) {
         if (this != &list) {
             erase();
-            append(list);
+            append(std::move(list));
         }
         return *this;
     }

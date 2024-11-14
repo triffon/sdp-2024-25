@@ -170,3 +170,56 @@ TEST_CASE_TEMPLATE("Разделяне на списък с 2 елемента",
     CHECK_EQ(list1.begin().next(), list1.end());
     CHECK_EQ(list2.begin().next(), list2.end());
 }
+
+TEST_CASE_TEMPLATE("Сливане на два непразни списъка от четни и нечетни числа", SomeList, LISTS) {
+    SomeList list1, list2;
+    CHECK(list1.insertLast(1));
+    CHECK(list1.insertLast(3));
+    CHECK(list1.insertLast(5));
+    CHECK(list1.insertLast(7));
+    CHECK(list1.insertLast(9));
+
+    CHECK(list2.insertLast(2));
+    CHECK(list2.insertLast(4));
+    CHECK(list2.insertLast(6));
+    CHECK(list2.insertLast(8));
+    CHECK(list2.insertLast(10));
+
+    SomeList result = ListUtils<int, SomeList>::merge(list1, list2);
+
+    int i = 1;
+    for (int j : result)
+        CHECK_EQ(i++, j);
+    CHECK_EQ(i, 11);
+}
+
+TEST_CASE_TEMPLATE("Сливане на два списъка, като единият от тях е празен", SomeList, LISTS) {
+    SomeList list1, list2;
+    CHECK(list2.insertLast(1));
+    CHECK(list2.insertLast(2));
+    CHECK(list2.insertLast(3));
+
+    SUBCASE("първият е празен") {
+        SomeList result = ListUtils<int, SomeList>::merge(list1, list2);
+
+        int i = 1;
+        for (int j : result)
+            CHECK_EQ(i++, j);
+        CHECK_EQ(i, 4);
+    }
+
+    SUBCASE("вторият е празен") {
+        SomeList result = ListUtils<int, SomeList>::merge(list2, list1);
+
+        int i = 1;
+        for (int j : result)
+            CHECK_EQ(i++, j);
+        CHECK_EQ(i, 4);
+    }
+}
+
+TEST_CASE_TEMPLATE("Сливане на два празни списъка", SomeList, LISTS) {
+    SomeList list1, list2;
+    SomeList result = ListUtils<int, SomeList>::merge(list1, list2);
+    CHECK(result.empty());
+}

@@ -31,7 +31,7 @@ public:
     // O(n) по време и по памет
     // TODO: да се направи реализация, която е O(1) по допълнителна памет
     // TODO: да се направи конкретна реализация, директно с представянето 
-    static void split(List const& list, List& list1, List& lsit2) {
+    static void split(List const& list, List& list1, List& list2) {
         if (!list1.empty() || !list2.empty())
             throw std::invalid_argument("Списъците list1 и list2 трябва да са празни!");
         List *me = &list1, *you = &list2;
@@ -39,6 +39,25 @@ public:
             me->insertLast(x);
             std::swap(me, you);
         }
+    }
+
+    // слива два сортирани във възходящ ред списъка
+    // O(n) по време и по памет
+    // TODO: да се направи реализация, която е O(1) по памет, с преместване вместо копиране
+    static List merge(List const& list1, List const& list2) {
+        typename List::Iterator it1 = list1.begin(), it2 = list2.begin();
+        List result;
+        while (it1 && it2)
+            if (*it1 < *it2)
+                result.insertLast(*it1++);
+            else
+                result.insertLast(*it2++);
+        // !it1 || !it2
+        while(it1)
+            result.insertLast(*it1++);
+        while(it2)
+            result.insertLast(*it2++);
+       return result;
     }
 };
 
