@@ -230,6 +230,65 @@ TEST_CASE_TEMPLATE("Изтриване на всички елементи в с�
     CHECK(list.empty());
 }
 
+TEST_CASE_TEMPLATE("При копиране на списък с конструктор не се получава споделяне на памет", SomeList, LISTS) {
+    SomeList list1;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list1.insertLast(i));
+
+    SomeList list2(list1);
+
+    CHECK(list1.insertFirst(0));
+    CHECK(list1.insertLast(11));
+    int x = 0;
+    CHECK(list2.deleteFirst(x));
+    CHECK_EQ(x, 1);
+    CHECK(list2.deleteLast(x));
+    CHECK_EQ(x, 10);
+
+    int i = 0;
+    for (int j : list1)
+        CHECK(j == i++);
+    CHECK(i == 12);
+
+    i = 2;
+    for (int j : list2)
+        CHECK(j == i++);
+    CHECK(i == 10);
+}
+
+TEST_CASE_TEMPLATE("При копиране на списък с операция за присвояване не се получава споделяне на памет", SomeList, LISTS) {
+    SomeList list1;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list1.insertLast(i));
+
+
+    SomeList list2;
+
+    for (int i = 20; i <= 30; i++)
+        CHECK(list2.insertLast(i));
+
+    list2 = list1;
+
+    CHECK(list1.insertFirst(0));
+    CHECK(list1.insertLast(11));
+    int x = 0;
+    CHECK(list2.deleteFirst(x));
+    CHECK_EQ(x, 1);
+    CHECK(list2.deleteLast(x));
+    CHECK_EQ(x, 10);
+
+    int i = 0;
+    for (int j : list1)
+        CHECK(j == i++);
+    CHECK(i == 12);
+
+    i = 2;
+    for (int j : list2)
+        CHECK(j == i++);
+    CHECK(i == 10);
+}
+
+
 TEST_CASE_TEMPLATE("Залепване на списък за друг списък", SomeList, LISTS) {
     SomeList list1, list2;
     for (int i = 1; i <= 10; i++)

@@ -97,12 +97,12 @@ public:
 
     LinkedList() : front(nullptr), back(nullptr) {}
     LinkedList(LinkedList const& list) : front(nullptr), back(nullptr) {
-        copy();
+        copy(list);
     }
     LinkedList& operator=(LinkedList const& list) {
         if (this != &list) {
             erase();
-            copy();
+            copy(list);
         }
         return *this;
     }
