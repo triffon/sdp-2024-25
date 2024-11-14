@@ -251,6 +251,19 @@ public:
         }
     }
     
+    bool isPalindrome() const {
+        if (empty())
+            return true;
+        I it1 = begin(), it2 = last();
+        while (it1 != it2 && it1.prev() != it2 && *it1 == *it2) {
+            ++it1;
+            --it2;
+        }
+        // *it1 != *it2 --- лош случай
+        // it1 == it2 -- добър случай, нечетна дължина
+        // it1.prev() = it2 -- добър случай, четна дължина
+        return *it1 == *it2;
+    }
 };
 
 #endif // DOUBLE_LINKED_LIST_HPP

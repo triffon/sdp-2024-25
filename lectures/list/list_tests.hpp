@@ -336,3 +336,43 @@ TEST_CASE_TEMPLATE("Залепване на списък към празен с�
         CHECK(j == i++);
     CHECK(i == 11);
 }
+
+TEST_CASE("Проверка, че списък е палиндром с isPalindrome()") {
+    DoubleLinkedList<int> list;
+    CHECK(list.isPalindrome());
+    CHECK(list.insertLast(1));
+    CHECK(list.isPalindrome());
+    CHECK(list.insertLast(2));
+    CHECK(!list.isPalindrome());
+    CHECK(list.insertLast(1));
+    CHECK(list.isPalindrome());
+    CHECK(list.insertLast(2));
+    CHECK(!list.isPalindrome());
+    CHECK(list.insertLast(1));
+    CHECK(list.isPalindrome());
+}
+
+TEST_CASE("Празният списък е палиндром") {
+    DoubleLinkedList<int> list;
+    CHECK(list.isPalindrome());
+}
+
+TEST_CASE("Списък с 1 елемент е палиндром") {
+    DoubleLinkedList<int> list;
+    CHECK(list.insertLast(1));
+    CHECK(list.isPalindrome());
+}
+
+TEST_CASE("Списък с 2 елемента е палиндром, ако елементите са равни") {
+    DoubleLinkedList<int> list;
+    CHECK(list.insertLast(1));
+    CHECK(list.insertLast(1));
+    CHECK(list.isPalindrome());
+}
+
+TEST_CASE("Списък с 2 елемента не е палиндром, ако елементите не са равни") {
+    DoubleLinkedList<int> list;
+    CHECK(list.insertLast(1));
+    CHECK(list.insertLast(2));
+    CHECK(!list.isPalindrome());
+}
