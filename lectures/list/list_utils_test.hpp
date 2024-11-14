@@ -45,3 +45,22 @@ TEST_CASE_TEMPLATE("Залепване на списък към празен с�
         CHECK(j == i++);
     CHECK(i == 11);
 }
+
+TEST_CASE_TEMPLATE("Обръщане на празен списък", SomeList, LISTS) {
+    SomeList list;
+    ListUtils<int, SomeList>::reverse(list);
+    CHECK(list.empty());
+}
+
+TEST_CASE_TEMPLATE("Обръщане на списък с числата от 1 до 10", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    ListUtils<int, SomeList>::reverse(list);
+
+    int i = 10;
+    for (int j : list)
+        CHECK(j == i--);
+    CHECK(i == 0);
+}
