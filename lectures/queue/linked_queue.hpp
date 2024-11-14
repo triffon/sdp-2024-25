@@ -25,6 +25,12 @@ private:
             dequeue();
     }
 
+    void move(LinkedQueue && other){
+        this->front = other.front;
+         other.front=nullptr;
+        this->back = other.back;
+        other.back=nullptr;
+    }
 public:
     LinkedQueue() : front(nullptr), back(nullptr) { }
     LinkedQueue(LinkedQueue const& lq) : LinkedQueue() {
@@ -34,6 +40,16 @@ public:
         if (this != &lq) {
             erase();
             copy(lq);
+        }
+        return *this;
+    }
+    LinkedQueue(LinkedQueue && other) noexcept{
+        move(std::move(other));
+    }
+    LinkedQueue& operator=(LinkedQueue && other) noexcept{
+        if(this!=&other){
+            erase();
+            move(std::move(other));
         }
         return *this;
     }

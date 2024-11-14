@@ -49,6 +49,21 @@ public:
         return *this;
     }
 
+    LinkedStack(LinkedStack&& rs) noexcept : top(rs.top) {
+        rs.top = nullptr;
+    }
+
+    LinkedStack& operator=(LinkedStack&& rs) noexcept {
+        if(this != &rs) {
+            erase();
+
+            top = rs.top;
+            rs.top = nullptr;
+        }
+
+        return *this;
+    }
+
     ~LinkedStack() {
         erase();
     }
@@ -67,8 +82,8 @@ public:
     T pop() {
         if (empty())
             throw std::runtime_error("Опит за изключване от празен стек");
-        StackElement<T>* toDelete = top;
-        T result = peek();
+        const StackElement<T>* const toDelete = top;
+        const T result = peek();
         top = top->next;
         delete toDelete;
         return result;
@@ -80,6 +95,14 @@ public:
             throw std::runtime_error("Опит за поглеждане в празен стек");
         return top->data;
     }
+
+    // поглеждане на елемента на върха на стека
+    T& peek() { 
+        if (empty())
+            throw std::runtime_error("Опит за поглеждане в празен стек");
+        return top->data;
+    }
+
 };
 
 #endif // LINKED_STACK_HPP
