@@ -59,6 +59,21 @@ public:
             result.insertLast(*it2++);
        return result;
     }
+
+    // сортира списъка сливайки сортираните му части
+    // O(n log(n)) по време и O(n) по памет
+    // TODO: да се реализира с O(1) по памет
+    static List mergeSort(List const& list) {
+        if (list.empty() || !list.begin().next().valid())
+            // списък с 0 или 1 елемента
+            return list;
+        // 1. разделяме списъка на две
+        List list1, list2;
+        split(list, list1, list2);
+        // 2. сортираме рекурсивно двата списъка
+        // 3. сливаме двата сортирани списъка
+        return merge(mergeSort(list1), mergeSort(list2));
+    }
 };
 
  

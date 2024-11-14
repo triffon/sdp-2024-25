@@ -223,3 +223,40 @@ TEST_CASE_TEMPLATE("Сливане на два празни списъка", Som
     SomeList result = ListUtils<int, SomeList>::merge(list1, list2);
     CHECK(result.empty());
 }
+
+TEST_CASE_TEMPLATE("Сортиране на непразен списък с числата от 1 до 10 в разбъркан ред", SomeList, LISTS) {
+    SomeList list;
+    CHECK(list.insertLast(5));
+    CHECK(list.insertLast(3));
+    CHECK(list.insertLast(7));
+    CHECK(list.insertLast(1));
+    CHECK(list.insertLast(10));
+    CHECK(list.insertLast(2));
+    CHECK(list.insertLast(9));
+    CHECK(list.insertLast(4));
+    CHECK(list.insertLast(6));
+    CHECK(list.insertLast(8));
+
+    SomeList result = ListUtils<int, SomeList>::mergeSort(list);
+
+    int i = 1;
+    for (int j : result)
+        CHECK_EQ(i++, j);
+    CHECK_EQ(i, 11);
+}
+
+TEST_CASE_TEMPLATE("Сортиране на празен списък", SomeList, LISTS) {
+    SomeList list;
+    ListUtils<int, SomeList>::mergeSort(list);
+    CHECK(list.empty());
+}
+
+TEST_CASE_TEMPLATE("Сортиране на списък с 1 елемент", SomeList, LISTS) {
+    SomeList list;
+    CHECK(list.insertLast(42));
+
+    ListUtils<int, SomeList>::mergeSort(list);
+
+    CHECK_EQ(*list.begin(), 42);
+    CHECK_EQ(list.begin().next(), list.end());
+}
