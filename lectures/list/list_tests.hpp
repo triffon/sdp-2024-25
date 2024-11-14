@@ -1,7 +1,8 @@
 #include "doctest.h"
 #include "linked_list.hpp"
+#include "double_linked_list.hpp"
 
-#define LISTS LinkedList<int>
+#define LISTS LinkedList<int>, DoubleLinkedList<int>
 
 TEST_CASE_TEMPLATE("При създаване списък е празен", SomeList, LISTS) {\
     SomeList list;

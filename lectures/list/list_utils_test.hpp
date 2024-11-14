@@ -2,8 +2,9 @@
 
 #include "list_utils.hpp"
 #include "linked_list.hpp"
+#include "double_linked_list.hpp"
 
-#define LISTS LinkedList<int>
+#define LISTS LinkedList<int>, DoubleLinkedList<int>
 
 TEST_CASE_TEMPLATE("Залепване на списък за друг списък", SomeList, LISTS) {
     SomeList list1, list2;
