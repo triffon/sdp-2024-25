@@ -1,5 +1,6 @@
 #ifndef LINKED_QUEUE_HPP
 #define LINKED_QUEUE_HPP
+#include <stdexcept>
 
 template <typename T>
 struct QueueElement {

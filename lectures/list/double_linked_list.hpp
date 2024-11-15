@@ -1,5 +1,7 @@
 #ifndef DOUBLE_LINKED_LIST_HPP
 #define DOUBLE_LINKED_LIST_HPP
+#include <utility>
+#include <stdexcept>
 
 template <typename T>
 struct DoubleLinkedListElement {

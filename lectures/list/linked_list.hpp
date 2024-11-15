@@ -1,5 +1,7 @@
 #ifndef LINKED_LIST_HPP
 #define LINKED_LIST_HPP
+#include <utility>
+#include <stdexcept>
 
 template <typename T>
 struct LinkedListElement {
