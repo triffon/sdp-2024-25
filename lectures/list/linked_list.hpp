@@ -1,5 +1,6 @@
 #ifndef LINKED_LIST_HPP
 #define LINKED_LIST_HPP
+
 #include <utility>
 #include <stdexcept>
 
@@ -92,6 +93,62 @@ class LinkedList {
     void erase() {
         while (!empty())
             deleteFirst(front->data);
+    }
+
+    void split(I list, I& left, I& right) {
+        if(!list.valid()) {
+            left = right = I();
+            return;
+        }
+
+        if(!list.next().valid()) {
+            left    = list;
+            right   = I();
+            return;
+        }
+
+        I slow = list;
+        I fast = list;
+
+        while(fast.valid() && fast.next().valid()) {
+            fast = fast.next().next();
+            if(fast.valid())
+                slow = slow.next();
+        }
+
+        left = list;
+        right = slow.next();
+        slow.ptr->next = nullptr;
+    } 
+
+    I merge(I left, I right) {
+        if(!left.valid())
+            return right;
+
+        if(!right.valid())
+            return left;
+
+        if(left.get() <= right.get()) {
+            left.ptr->next = merge(left.next(), right).ptr;
+            return left;
+        } else {
+            right.ptr->next = merge(left, right.next()).ptr;
+            return right;
+        }
+    }
+
+    I mergeSort(I list) {
+        if(!list.valid() || !list.next().valid()) {
+            return list;
+        }
+
+        I left = I(), right = I();
+
+        split(list, left, right);
+        left = mergeSort(left);
+        right = mergeSort(right);
+
+        return merge(left, right);
     }
 
 public:
@@ -240,6 +297,38 @@ public:
         }
     }
     
+    // Обръща списъка in place
+    // O(n) по време, О(1) по памет
+    void reverse() {
+        if (empty() || front == back) return; 
+
+        I prev = nullptr;
+        I curr = front;
+        I next = nullptr;
+
+        back = front;
+
+        while (curr != nullptr) {
+            next = curr.next();
+            
+            curr.ptr->next = prev.ptr;
+
+            prev = curr;
+            curr = next;
+        }
+
+        front = prev.ptr;
+    }
+
+    void sort() {
+        front = mergeSort(begin()).ptr;
+    
+        I it = begin();
+        while(it && it.next().valid())
+            it = it.next();
+
+        back = it.ptr;
+    }
 };
 
 #endif // LINKED_LIST_HPP
