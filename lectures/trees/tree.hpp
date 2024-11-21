@@ -15,10 +15,9 @@ public:
 private:
 
     void printEdges(std::ostream& os) {
-       SubtreeIterator it = subtrees();
-       while (it) {
-            os << "  " << root() << " -> " << (*it).root() << ";" << std::endl;
-            (*it++).printEdges(os);
+       for(SubtreeIterator sit = subtrees(); sit; ++sit) {
+            os << "  " << root() << " -> " << (*sit).root() << ";" << std::endl;
+            (*sit).printEdges(os);
        }
     }
 
