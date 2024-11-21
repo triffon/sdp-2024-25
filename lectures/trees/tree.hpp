@@ -14,11 +14,17 @@ public:
 
 private:
 
-    void printEdges(std::ostream& os) {
+    void printEdges(std::ostream& os) const {
+       for(Tree const& child : children) {
+            os << "  " << root() << " -> " << child.root() << ";" << std::endl;
+            child.printEdges(os);
+       }
+/*
        for(SubtreeIterator sit = subtrees(); sit; ++sit) {
             os << "  " << root() << " -> " << (*sit).root() << ";" << std::endl;
             (*sit).printEdges(os);
        }
+*/
     }
 
 public:
@@ -35,7 +41,7 @@ public:
 
     SubtreeIterator subtrees() const { return children.begin(); }
 
-    void printDOT(std::ostream& os = std::cout) {
+    void printDOT(std::ostream& os = std::cout) const {
         os << "digraph tree { " << std::endl;
         printEdges(os);
         os << "}" << std::endl;
@@ -43,8 +49,12 @@ public:
 
     int depth() const {
         int result = 1;
+        /*
         for(SubtreeIterator sit = subtrees(); sit; ++sit)
             result = std::max(result, (*sit).depth() + 1);
+        */
+        for(Tree const& child : children)
+            result = std::max(result, child.depth() + 1);
         return result;
     }
 };
