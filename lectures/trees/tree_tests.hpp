@@ -1,5 +1,7 @@
+#include <fstream>
 #include "doctest.h"
 #include "tree.hpp"
+
 
 TEST_CASE("Създаване на листо") {
     Tree<int> t(42);
@@ -40,4 +42,6 @@ TEST_CASE("Обхождане на по-голямо дърво с дълбоч�
     CHECK((++it3).valid());
     CHECK(it3.get().root() == 7);
     CHECK((++it3).valid() == false);
+    std::ofstream os("tree.dot");
+    t.printDOT(os);
 }
