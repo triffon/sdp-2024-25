@@ -4,22 +4,64 @@
 #include <stdexcept>
 
 template <typename T>
-struct TreeNode {
+struct BinaryTreeNode {
     T data;
-    TreeNode *left, *right;
+    BinaryTreeNode *left, *right;
+};
+
+template <typename T>
+class BinaryTreePosition {
+    BinaryTreeNode<T>* node;
+public:
+    BinaryTreePosition(BinaryTreeNode<T>* tn = nullptr) : node(tn) {}
+
+    bool valid() const { return node != nullptr; }
+
+    BinaryTreePosition left() const {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до ляво поддърво на невалидна позиция");
+        return BinaryTreePosition(node->left);
+    }
+
+    BinaryTreePosition right() const {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до дясно поддърво на невалидна позиция");
+        return BinaryTreePosition(node->right);
+    }
+
+    T const& get() const {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до стойност на невалидна позиция");
+        return node->data;
+    }
+
+    T& get() {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до стойност на невалидна позиция");
+        return node->data;
+    }
+
+    operator bool() { return valid(); }
+
+    T const& operator*() const { return get(); }
+    T      & operator*()       { return get(); }
+
+    BinaryTreePosition operator-() const { return left(); }
+    BinaryTreePosition operator+() const { return right(); }
 };
 
 template <typename T>
 class BinaryTree {
-    TreeNode *rootNode;
+    using N = BinaryTreeNode<T>;
+    N *rootNode;
 
-    TreeNode* copy(TreeNode* tn) {
+    N* copy(N* tn) const {
         if (tn == nullptr)
             return nullptr;
-        return new TreeNode{tn->data, copy(tn->left), copy(tn->right)};
+        return new N{tn->data, copy(tn->left), copy(tn->right)};
     }
 
-    void erase(TreeNode* tn) {
+    void erase(N* tn) {
         if (tn != nullptr) {
             erase(tn->left);
             erase(tn->right);
@@ -28,9 +70,11 @@ class BinaryTree {
     }
 
 public:
+    using Position = BinaryTreePosition<T>;
+
     BinaryTree() : rootNode(nullptr) {}
-    BinaryTree(T data, BinaryTree const& left, BinaryTree const& right) {
-        rootNode = new TreeNode{data, copy(left.rootNode), copy(right.rootNode)};
+    BinaryTree(T data, BinaryTree const& left = BinaryTree(), BinaryTree const& right = BinaryTree()) {
+        rootNode = new N{data, copy(left.rootNode), copy(right.rootNode)};
     }
     BinaryTree(BinaryTree const& bt) : rootNode(copy(bt.rootNode)) {}
     BinaryTree& operator=(BinaryTree const& bt) {
@@ -43,6 +87,8 @@ public:
     ~BinaryTree() { erase(rootNode); }
 
     bool empty() const { return rootNode == nullptr; }
+
+    Position rootPos() const { return Position(rootNode); }
     
     T const& root() const {
         if (empty())
