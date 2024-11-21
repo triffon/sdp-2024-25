@@ -58,3 +58,5 @@ TEST_CASE("Да се намери сумата от нечетните квад�
             ListHighOrderFunctions<int, LinkedList>::map([](int x) { return x * x; },     
                 ListHighOrderFunctions<int, LinkedList>::filter([](int x) { return x % 2 != 0; }, list.begin()).begin()).begin()));
 }
+
+// TODO: Да се намери произведението от най-малките положителни елементи на списък от списъци от числа

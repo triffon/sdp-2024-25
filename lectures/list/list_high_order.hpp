@@ -41,6 +41,9 @@ public:
                 result.insertLast(*it);
         return result;
     }
+
+    // TODO: мутираща версия на map
+    // TODO: мутираща версия на filter
     
 };
 
