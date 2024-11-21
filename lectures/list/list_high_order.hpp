@@ -1,7 +1,7 @@
 #ifndef LIST_HIGH_ORDER_HPP
 #define LIST_HIGH_ORDER_HPP
 
-
+#include <stdexcept>
 
 template <typename T, template <typename> class List, typename R = T>
 class ListHighOrderFunctions {
@@ -18,6 +18,16 @@ public:
         if (!it)
             return nv;
         return op(*it, foldr(op, nv, it.next()));
+    }
+
+    static T foldr1(BinaryFunctionRight op, I it) {
+        if(!it.valid())
+            throw std::runtime_error("foldr1 не работи над празен списък");
+
+        if (!it.next())
+            return *it;
+
+        return op(*it, foldr1(op, it.next()));
     }
 
     static R foldl(BinaryFunctionLeft op, R nv, I it) {
@@ -41,10 +51,6 @@ public:
                 result.insertLast(*it);
         return result;
     }
-
-    // TODO: мутираща версия на map
-    // TODO: мутираща версия на filter
-    
 };
 
 #endif // LIST_HIGH_ORDER_HPP
