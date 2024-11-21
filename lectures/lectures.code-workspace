@@ -17,6 +17,9 @@
 		},
 		{
 			"path": "list"
+		},
+		{
+			"path": "trees"
 		}
 	],
 	"settings": {
