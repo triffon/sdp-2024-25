@@ -1,6 +1,7 @@
 #ifndef BINARY_TREE_HPP
 #define BINARY_TREE_HPP
 
+#include <iostream>
 #include <stdexcept>
 
 template <typename T>
@@ -116,6 +117,25 @@ public:
         BinaryTree result;
         result.rootNode = copy(rootNode->right);
         return result;
+    }
+
+    void printDOT(std::ostream& os, Position pos) {
+        if (pos) {
+            if (-pos) {
+                os << "  " << *pos << " -> " << *-pos << ";\n";
+                printDOT(os, -pos);
+            }
+            if (+pos) {
+                os << "  " << *pos << " -> " << *+pos << ";\n";
+                printDOT(os, +pos);
+            }
+        }
+    }
+
+    void printDOT(std::ostream& os = std::cout) {
+        os << "digraph BinaryTree {" << std::endl;
+        printDOT(os, rootPos());
+        os << "}" << std::endl;
     }
 };
 

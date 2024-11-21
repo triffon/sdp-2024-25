@@ -1,6 +1,8 @@
 #include "doctest.h"
 #include "binary_tree.hpp"
 
+#include <fstream>
+
 TEST_CASE("Създаване на празно дърво") {
     BinaryTree<int> bt;
     CHECK(bt.empty());
@@ -32,4 +34,7 @@ TEST_CASE("Създаване на по-сложно дърво") {
         CHECK_EQ(*-(+pos), 4);
         CHECK_EQ(*+(+pos), 5);
     }
+
+    std::ofstream dotFile("binary_tree.dot");
+    bt.printDOT(dotFile);
 }
