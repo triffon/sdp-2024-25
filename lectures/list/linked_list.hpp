@@ -240,6 +240,38 @@ public:
         }
     }
     
+    void mapMut(T (*f)(T)) {
+        I temp = begin();
+        while (temp.valid()) {
+            *temp = f(*temp);
+            ++temp;
+        }
+    }
+
+    void filterMut(bool (*p)(T)) {
+        I curr = begin();
+
+        // търсене на първи елемент
+        while(!p(*curr)) {
+            ++curr;
+        }
+
+        if(!curr.valid()) {
+            erase();
+            front = back = nullptr;
+            return;
+        }
+        
+        // curr is valid and p(curr) == true
+        T holder;
+        while(curr.valid() && curr.next().valid()) {
+            if (!p(*(curr.next()))) {
+                deleteAfter(holder, curr);
+            }
+        
+            ++curr;
+        }
+    }
 };
 
 #endif // LINKED_LIST_HPP
