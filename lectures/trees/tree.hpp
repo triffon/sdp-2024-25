@@ -41,6 +41,13 @@ public:
         printEdges(os);
         os << "}" << std::endl;
     }
+
+    int depth() const {
+        int result = 1;
+        for(SubtreeIterator sit = subtrees(); sit; ++sit)
+            result = std::max(result, (*sit).depth() + 1);
+        return result;
+    }
 };
 
 

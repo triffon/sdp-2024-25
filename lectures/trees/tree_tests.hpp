@@ -44,4 +44,8 @@ TEST_CASE("Обхождане на по-голямо дърво с дълбоч�
     CHECK((++it3).valid() == false);
     std::ofstream os("tree.dot");
     t.printDOT(os);
+
+    SUBCASE("Дълбочина на дървото") {
+        CHECK_EQ(t.depth(), 3);
+    }
 }
