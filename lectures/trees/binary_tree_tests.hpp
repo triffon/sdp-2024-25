@@ -47,6 +47,8 @@ TEST_CASE("Намиране на дълбочина на празно дърво
 TEST_CASE("Намиране на дълбочина на непразно дърво") {
     BinaryTree<int> bt(1, BinaryTree<int>(2),
                           BinaryTree<int>(3, BinaryTree<int>(4), BinaryTree<int>(5)));
-    CHECK_EQ(bt.depth(), 3);
+    BinaryTree<int> ubertree(10, std::move(bt), BinaryTree<int>(11));
+    CHECK_EQ(bt.depth(),  0);
+    CHECK_EQ(ubertree.depth(), 4);
 }
 

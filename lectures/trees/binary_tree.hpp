@@ -74,8 +74,9 @@ public:
     using Position = BinaryTreePosition<T>;
 
     BinaryTree() : rootNode(nullptr) {}
-    BinaryTree(T data, BinaryTree const& left = BinaryTree(), BinaryTree const& right = BinaryTree()) {
-        rootNode = new N{data, copy(left.rootNode), copy(right.rootNode)};
+    BinaryTree(T data, BinaryTree&& left = BinaryTree(), BinaryTree&& right = BinaryTree()) {
+        rootNode = new N{data, left.rootNode, right.rootNode};
+        left.rootNode = right.rootNode = nullptr;
     }
     BinaryTree(BinaryTree const& bt) : rootNode(copy(bt.rootNode)) {}
     BinaryTree& operator=(BinaryTree const& bt) {
