@@ -1,21 +1,4 @@
 #include "rpn_calculator.hpp"
-#include <cctype>
-#include <cmath>
-#include <stdexcept>
-
-double RPNCalculator::applyOperation(char op, double left_arg, double right_arg) {
-    switch(op) {
-        case '+': return left_arg + right_arg;
-        case '-': return left_arg - right_arg;
-        case '*': return left_arg * right_arg;
-        case '/':
-            if (right_arg == 0)
-                throw std::invalid_argument("Опит за деление на 0");
-            return left_arg / right_arg;
-        case '^': return pow(left_arg, right_arg);
-        default: throw std::invalid_argument("Невалидна операция");
-    }
-}
 
 double RPNCalculator::calculateRPN(std::string const& rpn) {
     for(char c : rpn) {
@@ -57,19 +40,4 @@ std::string RPNCalculator::convertToRPN(std::string const& expr) {
     while (!ops.empty())
         rpn += ops.pop();
     return rpn;
-}
-
-int RPNCalculator::priority(char op) {
-    switch(op) {
-        case '+':
-        case '-':
-            return 1;
-        case '*':
-        case '/':
-            return 2;
-        case '^':
-            return 3;
-
-        default: throw std::invalid_argument("Невалидна операция");
-    }  
 }

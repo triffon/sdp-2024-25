@@ -1,17 +1,15 @@
 #ifndef RPN_CALCULATOR_HPP
 #define RPN_CALCULATOR_HPP
 #include <string>
+#include "calculator.hpp"
 #include "linked_stack.hpp"
 
 using ResultStack = LinkedStack<double>;
 using OperationStack = LinkedStack<char>;
 
-class RPNCalculator {
+class RPNCalculator : public Calculator {
     ResultStack results;
     OperationStack ops;
-    static double digitValue(char digit) { return digit - '0'; }
-    static double applyOperation(char op, double left_arg, double right_arg);
-    static int priority(char op);
 public:
     double calculateRPN(std::string const& rpn);
     std::string convertToRPN(std::string const& expr);
