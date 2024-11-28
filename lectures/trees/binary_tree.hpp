@@ -53,9 +53,11 @@ public:
 
 template <typename T>
 class BinaryTree {
+protected:
     using N = BinaryTreeNode<T>;
     N *rootNode;
 
+private:
     static N* copy(N* tn) {
         if (tn == nullptr)
             return nullptr;
