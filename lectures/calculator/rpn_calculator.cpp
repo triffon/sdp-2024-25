@@ -39,9 +39,15 @@ std::string RPNCalculator::convertToRPN(std::string const& expr) {
             // c е цифра, записваме я в резултата
             rpn += c;
         else if (c == ')') {
+            if(ops.empty())
+                throw std::invalid_argument("Броят на затварящите скоби е повече.");
+
             // c е затваряща скоба, изваждаме всички операции до отваряща скоба
-            while (ops.peek() != '(')
+            while (ops.peek() != '('){
                 rpn += ops.pop();
+                if(ops.empty())
+                    throw std::invalid_argument("Броят на затварящите скоби е повече.");
+            }
             // изваждане на отварящата скоба от стека
             ops.pop();
         } else if (c == '(')
@@ -54,8 +60,11 @@ std::string RPNCalculator::convertToRPN(std::string const& expr) {
                 rpn += ops.pop();
             ops.push(c);
         }
-    while (!ops.empty())
+    while (!ops.empty()){
+        if(ops.peek() == '(')
+            throw std::invalid_argument("Има повече отварящи скоби");
         rpn += ops.pop();
+    }
     return rpn;
 }
 
