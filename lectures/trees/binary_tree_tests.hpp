@@ -38,3 +38,15 @@ TEST_CASE("Създаване на по-сложно дърво") {
     std::ofstream dotFile("binary_tree.dot");
     bt.printDOT(dotFile);
 }
+
+TEST_CASE("Намиране на дълбочина на празно дърво") {
+    BinaryTree<int> bt;
+    CHECK_EQ(bt.depth(), 0);
+}
+
+TEST_CASE("Намиране на дълбочина на непразно дърво") {
+    BinaryTree<int> bt(1, BinaryTree<int>(2),
+                          BinaryTree<int>(3, BinaryTree<int>(4), BinaryTree<int>(5)));
+    CHECK_EQ(bt.depth(), 3);
+}
+

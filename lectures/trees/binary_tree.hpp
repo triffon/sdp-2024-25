@@ -137,6 +137,14 @@ public:
         printDOT(os, rootPos());
         os << "}" << std::endl;
     }
+
+    size_t depth() const {
+        return depth(rootPos());
+    }
+
+    size_t depth(Position pos) const {
+        return !pos ? 0 : 1 + std::max(depth(-pos), depth(+pos));
+    }
 };
 
 
