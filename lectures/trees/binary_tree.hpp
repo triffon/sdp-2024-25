@@ -120,20 +120,20 @@ public:
         return result;
     }
 
-    void printDOT(std::ostream& os, Position pos) {
+    static void printDOT(std::ostream& os, Position pos) {
         if (pos) {
             if (-pos) {
-                os << "  " << *pos << " -> " << *-pos << ";\n";
+                os << "  \"" << *pos << "\" -> \"" << *-pos << "\";\n";
                 printDOT(os, -pos);
             }
             if (+pos) {
-                os << "  " << *pos << " -> " << *+pos << ";\n";
+                os << "  \"" << *pos << "\" -> \"" << *+pos << "\";\n";
                 printDOT(os, +pos);
             }
         }
     }
 
-    void printDOT(std::ostream& os = std::cout) {
+    void printDOT(std::ostream& os = std::cout) const {
         os << "digraph BinaryTree {" << std::endl;
         printDOT(os, rootPos());
         os << "}" << std::endl;
@@ -153,7 +153,7 @@ public:
 
     bool operator!=(BinaryTree const& bt) const {
         return !(*this == bt);
-    }
+    }   
 
 private:
     static bool equal(Position const& pos1, Position const& pos2) {
