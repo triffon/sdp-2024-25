@@ -55,3 +55,13 @@ TEST_CASE("Намиране на дълбочина на непразно дър
     CHECK_EQ(ubertree.depth(), 4);
 }
 
+TEST_CASE("Проверка на две дървета за равенство") {
+    BinaryTree<int> bt1(1, BinaryTree<int>(2),
+                           BinaryTree<int>(3, BinaryTree<int>(4), BinaryTree<int>(5)));
+    BinaryTree<int> bt2(1, BinaryTree<int>(2),
+                           BinaryTree<int>(3, BinaryTree<int>(4), BinaryTree<int>(5)));
+    BinaryTree<int> bt3(1, BinaryTree<int>(2),
+                           BinaryTree<int>(3, BinaryTree<int>(4), BinaryTree<int>(6)));
+    CHECK_EQ(bt1, bt2);
+    CHECK_NE(bt1, bt3);
+}

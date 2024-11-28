@@ -42,7 +42,7 @@ public:
         return node->data;
     }
 
-    operator bool() { return valid(); }
+    operator bool() const { return valid(); }
 
     T const& operator*() const { return get(); }
     T      & operator*()       { return get(); }
@@ -56,13 +56,13 @@ class BinaryTree {
     using N = BinaryTreeNode<T>;
     N *rootNode;
 
-    N* copy(N* tn) const {
+    static N* copy(N* tn) {
         if (tn == nullptr)
             return nullptr;
         return new N{tn->data, copy(tn->left), copy(tn->right)};
     }
 
-    void erase(N* tn) {
+    static void erase(N* tn) {
         if (tn != nullptr) {
             erase(tn->left);
             erase(tn->right);
@@ -143,8 +143,21 @@ public:
         return depth(rootPos());
     }
 
-    size_t depth(Position pos) const {
+    static size_t depth(Position pos) {
         return !pos ? 0 : 1 + std::max(depth(-pos), depth(+pos));
+    }
+
+    bool operator==(BinaryTree const& bt) const {
+        return equal(rootPos(), bt.rootPos());
+    }
+
+    bool operator!=(BinaryTree const& bt) const {
+        return !(*this == bt);
+    }
+
+private:
+    static bool equal(Position const& pos1, Position const& pos2) {
+        return !pos1 && !pos2 || pos1 && pos2 && *pos1 == *pos2 && equal(-pos1, -pos2) && equal(+pos1, +pos2);
     }
 };
 
