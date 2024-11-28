@@ -1,5 +1,6 @@
 #include "doctest.h"
 #include "rpn_calculator.hpp"
+#include "binary_tree_calculator.hpp"
 
 TEST_CASE("Пресмятане на израза в обратен полски запис от слайдовете") {
     RPNCalculator calc;
@@ -29,4 +30,9 @@ TEST_CASE("Преобразуване на втория израз от слай
 TEST_CASE("Пресмятане на аритметичния израз от слайдовете") {
     RPNCalculator calc;
     CHECK_EQ(calc.calculate("(1+2)*(3/4-5)"), doctest::Approx(-12.75));
+}
+
+TEST_CASE("Пример за пресмятане на аритметичен израз с двоично дърво") {
+    BinaryTreeCalculator calc;
+    CHECK_EQ(calc.calculate("((1+2)*(3-(4/5)))"), doctest::Approx(6.6));
 }
