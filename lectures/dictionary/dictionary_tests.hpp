@@ -1,8 +1,9 @@
 #include "doctest.h"
 #include <string>
 #include "associative_list.hpp"
+#include "bst_dictionary.hpp"
 
-#define DICTIONARIES AssociativeList<int, std::string>
+#define DICTIONARIES AssociativeList<int, std::string>, BSTDictionary<int, std::string>
 
 TEST_CASE_TEMPLATE("Добавяне на един елемент в речник", SomeDictionary, DICTIONARIES) {
     SomeDictionary dict;
