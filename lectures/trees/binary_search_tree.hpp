@@ -1,6 +1,8 @@
 #ifndef BINARY_SEARCH_TREE_HPP
 #define BINARY_SEARCH_TREE_HPP
 
+#include <vector>
+#include <algorithm>
 #include "binary_tree.hpp"
 
 template <typename T>
@@ -24,8 +26,23 @@ class BinarySearchTree : public BinaryTree<T> {
             node = &((*node)->left);
         return *node;
     }
+
+    /* Построява идеално балансирано ДДТ с елементите на индекси от left до right, включително */
+    N* buildPerfectlyBalancedTree(std::vector<T>& elements, int left, int right) {
+        if (left > right)
+            return nullptr;
+        int midIndex = (left + right) / 2;
+        return new N{elements[midIndex], 
+                     buildPerfectlyBalancedTree(elements, left, midIndex - 1),
+                     buildPerfectlyBalancedTree(elements, midIndex + 1, right)};
+    }
 public:
     using typename BinaryTree<T>::Position;
+
+    BinarySearchTree(std::vector<T> elements = std::vector<T>()) {
+        std::sort(elements.begin(), elements.end());
+        this->rootNode = buildPerfectlyBalancedTree(elements, 0, elements.size() - 1);
+    }
 
     bool exists(T const& el) const {
         return search(el);

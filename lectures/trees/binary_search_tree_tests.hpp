@@ -47,3 +47,14 @@ TEST_CASE("Добавяне на числата от 1 до 10 в нараств
     CHECK(!bst.exists(0));
     CHECK(!bst.exists(11));
 }
+
+TEST_CASE("Построяване на идеално балансирано дърво по списък от числата от 1 до 10 в случаен ред") {
+    std::vector<int> elements{5, 3, 8, 2, 4, 7, 9, 1, 6, 10};
+    BinarySearchTree<int> bst(elements);
+    std::ofstream dotFile("balanced_bst.dot");
+    bst.printDOT(dotFile);
+    for (int i = 1; i <= 10; i++)
+        CHECK_EQ(*bst.search(i), i);
+    CHECK(!bst.exists(0));
+    CHECK(!bst.exists(11));
+}
