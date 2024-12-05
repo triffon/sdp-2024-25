@@ -19,6 +19,21 @@ TEST_CASE("Добавяне на числата от 1 до 10 в случаен
         CHECK_EQ(*bst.search(i), i);
     CHECK(!bst.exists(0));
     CHECK(!bst.exists(11));
+
+    SUBCASE("Опит за изтриване на несъществуващ елемент") {
+        CHECK(!bst.remove(0));
+        CHECK(!bst.remove(11));
+    }
+
+    SUBCASE("Последователно изтриване на числата в друг случаен ред") {
+        for (int i : {7, 2, 5, 9, 6, 8, 4, 1, 10, 3}) {
+            CHECK(bst.remove(i));
+            std::ofstream dotFile("bst_after_remove_" + std::to_string(i) + ".dot");
+            bst.printDOT(dotFile);
+        }
+        for (int i = 1; i <= 10; i++)
+            CHECK(!bst.exists(i));
+    }
 }
 
 TEST_CASE("Добавяне на числата от 1 до 10 в нарастващ ред в двоично дърво за търсене и намирането им") {

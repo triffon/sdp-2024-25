@@ -17,6 +17,13 @@ class BinarySearchTree : public BinaryTree<T> {
                 node = &((*node)->right);
         return *node;
     }
+
+    N*& findMin(N*& start) {
+        N** node = &start;
+        while((*node)->left != nullptr)
+            node = &((*node)->left);
+        return *node;
+    }
 public:
     using typename BinaryTree<T>::Position;
 
@@ -45,6 +52,36 @@ public:
         // елементът го няма, добавяме го
         node = new N{el, nullptr, nullptr};
         return true;
+    }
+
+    bool remove(T const& el) {
+        N*& node = findNode(el);
+        if (node == nullptr)
+          // елементът го няма, не правим нищо
+          return false;
+        
+        if (node->right == nullptr) {
+            // нямаме дясно поддърво
+            N* toDelete = node;
+            node = node->left;
+            delete toDelete;
+            return true;
+        }
+        // node->right != nullptr;
+
+        // TODO: да редуваме най-малък от дясното и най-голям от лявото
+
+        // ходим наляво от дясното докато можем
+        N*& minNode = node->left != nullptr ? findMin(node->right) : node;
+
+        // прехвърляме стойността на minNode на мястото на корена
+        node->data = minNode->data;
+        N* toDelete = minNode;
+        minNode = minNode->right;
+        delete toDelete;
+
+        return true;
+
     }
 };
 
