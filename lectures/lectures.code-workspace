@@ -20,6 +20,9 @@
 		},
 		{
 			"path": "trees"
+		},
+		{
+			"path": "dictionary"
 		}
 	],
 	"settings": {
