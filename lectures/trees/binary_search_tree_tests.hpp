@@ -20,3 +20,15 @@ TEST_CASE("Добавяне на числата от 1 до 10 в случаен
     CHECK(!bst.exists(0));
     CHECK(!bst.exists(11));
 }
+
+TEST_CASE("Добавяне на числата от 1 до 10 в нарастващ ред в двоично дърво за търсене и намирането им") {
+    BinarySearchTree<int> bst;
+    for (int i = 1; i <= 10; i++)
+        CHECK(bst.insert(i));
+    std::ofstream dotFile("bst2.dot");
+    bst.printDOT(dotFile);
+    for (int i = 1; i <= 10; i++)
+        CHECK_EQ(*bst.search(i), i);
+    CHECK(!bst.exists(0));
+    CHECK(!bst.exists(11));
+}
