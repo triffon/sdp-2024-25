@@ -1,5 +1,6 @@
 #ifndef DOUBLE_LINKED_LIST_HPP
 #define DOUBLE_LINKED_LIST_HPP
+
 #include <utility>
 #include <stdexcept>
 
@@ -98,6 +99,71 @@ class DoubleLinkedList {
     void erase() {
         while (!empty())
             deleteFirst(front->data);
+    }
+
+    void split(I& list, I& left, I& right) {
+        if(!list.valid()) {
+            left = right = I();
+            return;
+        }
+
+        if(!list.next().valid()) {
+            left    = list;
+            right   = I();
+            return;
+        }
+
+        I slow = list;
+        I fast = list;
+
+        while(fast.valid() && fast.next().valid()) {
+            fast = fast.next().next();
+            if(fast.valid())
+                slow = slow.next();
+        }
+
+        left = list;
+        right = slow.next();
+        slow.ptr->next->prev = nullptr;
+        slow.ptr->next = nullptr;
+    } 
+
+    I merge(I left, I right) {
+        if(!left.valid())
+            return right;
+
+        if(!right.valid())
+            return left;
+
+        if(left.get() <= right.get()) {
+            I recResult = merge(left.next(), right);
+            left.ptr->next = recResult.ptr;
+            recResult.ptr->prev = left.ptr;
+            return left;
+        } else {
+            I recResult = merge(left, right.next());
+            right.ptr->next = recResult.ptr;
+            recResult.ptr->prev = right.ptr;
+            return right;
+        }
+    }
+
+    I mergeSort(I list) {
+        if(!list.valid()) {
+            return I();
+        }
+
+        if(!list.next().valid()) {
+            return list;
+        }
+
+        I left = I(), right = I();
+
+        split(list, left, right);
+        left = mergeSort(left);
+        right = mergeSort(right);
+
+        return merge(left, right);
     }
 
 public:
@@ -265,6 +331,40 @@ public:
         // it1 == it2 -- добър случай, нечетна дължина
         // it1.prev() = it2 -- добър случай, четна дължина
         return *it1 == *it2;
+    }
+
+    // Обръща списъка in place
+    // O(n) по време, О(1) по памет
+    void reverse() {
+        if (empty() || front == back) return; 
+
+        I prevEl = nullptr;
+        I currEl = front;
+        I nextEl = nullptr;
+
+        back = front;
+
+        while (currEl != nullptr) {
+            nextEl = currEl.next();
+
+            currEl.ptr->next = prevEl.ptr;
+            currEl.ptr->prev = nextEl.ptr;
+            
+            prevEl = currEl;
+            currEl = nextEl;
+        }
+
+        front = prevEl.ptr;
+    }
+
+    void sort() {
+        front = mergeSort(begin()).ptr;
+    
+        I it = begin();
+        while(it && it.next().valid())
+            it = it.next();
+
+        back = it.ptr;
     }
 };
 

@@ -376,3 +376,71 @@ TEST_CASE("Списък с 2 елемента не е палиндром, ако
     CHECK(list.insertLast(2));
     CHECK(!list.isPalindrome());
 }
+
+
+TEST_CASE_TEMPLATE("Обръщане на празен списък без заделяне на нова памет", SomeList, LISTS) {
+    SomeList list;
+    list.reverse();
+    CHECK(list.empty());
+}
+
+TEST_CASE_TEMPLATE("Обръщане на списък с 1 елемент без заделяне на нова памет", SomeList, LISTS) {
+    const unsigned val = 42;
+    SomeList list;
+
+    list.insertFirst(val);
+    list.reverse();
+    
+    CHECK(!list.empty());
+    CHECK_EQ(list.begin().get(), val);
+}
+
+TEST_CASE_TEMPLATE("Обръщане на списък с числата от 1 до 10 без заделяне на нова памет", SomeList, LISTS) {
+    SomeList list;
+    for (int i = 1; i <= 10; i++)
+        CHECK(list.insertLast(i));
+
+    list.reverse();
+
+    int i = 10;
+    for (int j : list)
+        CHECK(j == i--);
+    CHECK(i == 0);
+}
+
+TEST_CASE_TEMPLATE("Сортиране на непразен списък с числата от 1 до 10 в разбъркан ред", SomeList, LISTS) {
+    SomeList list;
+    CHECK(list.insertLast(5));
+    CHECK(list.insertLast(3));
+    CHECK(list.insertLast(7));
+    CHECK(list.insertLast(1));
+    CHECK(list.insertLast(10));
+    CHECK(list.insertLast(2));
+    CHECK(list.insertLast(9));
+    CHECK(list.insertLast(4));
+    CHECK(list.insertLast(6));
+    CHECK(list.insertLast(8));
+
+    list.sort();
+
+    int i = 1;
+    for (int j : list)
+        CHECK_EQ(i++, j);
+    CHECK_EQ(i, 11);
+}
+
+TEST_CASE_TEMPLATE("Сортиране на празен списък", SomeList, LISTS) {
+    SomeList list;
+    list.sort();
+    CHECK(list.empty());
+}
+
+TEST_CASE_TEMPLATE("Сортиране на списък с 1 елемент", SomeList, LISTS) {
+    SomeList list;
+    CHECK(list.insertLast(42));
+
+    list.sort();
+
+    CHECK_EQ(*list.begin(), 42);
+    CHECK_EQ(list.begin().next(), list.end());
+}
