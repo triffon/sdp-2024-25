@@ -240,6 +240,30 @@ public:
         }
     }
     
+    void mapMut(T (*f)(T)) {
+        for(T& el : *this)
+            el = f(el);
+    }
+
+    void filterMut(bool (*p)(T)) {
+        T deletedValue;
+        I curr = begin();
+
+        // търсене на първи елемент
+        while(curr.valid() && !p(*curr)) {
+            ++curr;
+            deleteFirst(deletedValue);
+        }
+
+        // curr е валиден и p(curr) е истина
+        while(curr.valid() && curr.next().valid()) {
+            if (!p(*(curr.next()))) {
+                deleteAfter(deletedValue, curr);
+            }
+        
+            ++curr;
+        }
+    }
 };
 
 #endif // LINKED_LIST_HPP
