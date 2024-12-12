@@ -11,6 +11,85 @@ using HashFunction = size_t (*)(K const&);
 template <typename K>
 K id(K const& x) { return x; }
 
+template <typename K, typename V>
+class HashTableIterator {
+    using KVP = KeyValuePair<K, V>;
+    using Bucket = DoubleLinkedList<KVP>;
+    using BI = typename Bucket::Iterator;
+    Bucket const* currentBucket;
+    Bucket const* end;
+    BI bucketIterator;
+public:
+    HashTableIterator() : currentBucket(nullptr), end(nullptr) {}
+    HashTableIterator(Bucket const& bucket, Bucket const* _end) : currentBucket(&bucket),
+                                                    end(_end) {
+        findNextValidBucket();
+        if (currentBucket != end)
+            bucketIterator = currentBucket->begin();
+    }
+
+    bool valid() const { return currentBucket != nullptr && 
+                                currentBucket != end &&
+                                bucketIterator.valid(); }
+
+    void findNextValidBucket() {
+        while (currentBucket != end && currentBucket->empty())
+            currentBucket++;
+    }
+
+    HashTableIterator next() const {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до следваща позиция от невалидна позиция");
+        HashTableIterator nextit = *this;
+        // опит за преминаване на следващия елемент в кофата
+        ++(nextit.bucketIterator);
+        if (!nextit.bucketIterator.valid()) {
+            ++nextit.currentBucket;
+            nextit.findNextValidBucket();
+            if (nextit.currentBucket != nextit.end)
+                nextit.bucketIterator = nextit.currentBucket->begin();
+        }
+        return nextit;
+    }
+
+    KVP const& get() const {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до елемент на невалидна позиция");
+        return bucketIterator.get();
+    }
+
+    KVP& get() {
+        if (!valid())
+            throw std::runtime_error("Опит за достъп до елемент на невалидна позиция");
+        return bucketIterator.get();
+    }
+
+    /* Синтактична захар */
+    bool operator==(HashTableIterator const& it) const {
+        return !valid() && !it.valid() ||
+                valid() && it.valid() && bucketIterator == it.bucketIterator;
+    }
+    bool operator!=(HashTableIterator const& it) const { return !(*this == it); }
+
+    // префиксен
+    // (++it) = it2
+    HashTableIterator& operator++() {
+        return *this = next();
+    }
+
+    // постфиксен
+    HashTableIterator operator++(int) {
+        HashTableIterator old = *this;
+        ++(*this);
+        return old;
+    }
+
+    KVP&       operator*()       { return get(); }
+    KVP const& operator*() const { return get(); }
+
+    operator bool() const { return valid(); }
+};
+
 template <typename K, typename V, HashFunction<K> hashFunction = id>
 class HashTable {
 private:
@@ -57,6 +136,9 @@ private:
     }
 
 public:
+    using Iterator = HashTableIterator<K, V>;
+
+
     HashTable(size_t _capacity = DEFAULT_CAPACITY) : capacity(_capacity), collisions(0), buckets(0) {
         table = new Bucket[capacity];
     }
@@ -137,6 +219,14 @@ public:
     void printStatistics(std::ostream& os = std::clog) {
         std::clog << "Колизии: " << collisions << std::endl;
         std::clog << "Кофи: " << buckets << std::endl;
+    }
+
+    Iterator begin() const {
+        return Iterator(table[0], table + capacity);
+    }
+
+    Iterator end() const {
+        return Iterator(table[capacity], table + capacity);
     }
 };
 
