@@ -107,7 +107,9 @@
 			"xmemory": "cpp",
 			"xtr1common": "cpp",
 			"xtree": "cpp",
-			"span": "cpp"
+			"span": "cpp",
+			"text_encoding": "cpp",
+			"variant": "cpp"
 		}
 	}
 }

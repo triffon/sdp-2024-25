@@ -8,9 +8,35 @@ size_t basicHashFunction(std::string const& s) {
     return s.length();
 }
 
+size_t betterHashFunction(std::string const& s) {
+    return s[0];
+}
+
+size_t sumHashFunction(std::string const& s) {
+    size_t result = 0;
+    for(char c : s)
+        result += c;
+    return result;
+}
+
+size_t betterSumHashFunction(std::string const& s) {
+    size_t result = 0;
+    for(int i = 0; i < s.size(); i++) {
+        (result *= 17) += s[i];
+    }
+    return result;
+}
+
+
+//using TestHashTable = HashTable<std::string, int, basicHashFunction>;
+//using TestHashTable = HashTable<std::string, int, betterHashFunction>;
+//using TestHashTable = HashTable<std::string, int, sumHashFunction>;
+using TestHashTable = HashTable<std::string, int, betterSumHashFunction>;
+
+
 #define DICTIONARIES AssociativeList<std::string, int>, \
                      BSTDictionary<std::string, int>, \
-                     HashTable<std::string, int, basicHashFunction>
+                     TestHashTable
 
 TEST_CASE_TEMPLATE("Добавяне на един елемент в речник", SomeDictionary, DICTIONARIES) {
     SomeDictionary dict;
@@ -65,6 +91,19 @@ TEST_CASE_TEMPLATE("Добавяне на всички числа от 1 до 10
     for(KeyValuePair<std::string, int> const& kvp : dict)
         CHECK_EQ(kvp.key, std::to_string(kvp.value));
         */
+    for (int i = 1; i <= 100; i++)
+        CHECK(dict.remove(std::to_string(i)));
+    for (int i = 1; i <= 100; i++)
+        CHECK(!dict.remove(std::to_string(i)));
+}
+
+TEST_CASE("Добавяне на всички числа от 1 до 100 в хеш таблица и изтриването им след това") {
+    TestHashTable dict;
+    for (int i = 1; i <= 100; i++)
+        CHECK(dict.add(std::to_string(i), i));
+    for (int i = 100; i >= 1; i--)
+        CHECK_EQ(dict.lookup(std::to_string(i)), i);
+    dict.printStatistics();
     for (int i = 1; i <= 100; i++)
         CHECK(dict.remove(std::to_string(i)));
     for (int i = 1; i <= 100; i++)
