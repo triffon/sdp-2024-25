@@ -10,8 +10,11 @@ class AssociativeList : DoubleLinkedList<KeyValuePair<K, V>> {
 private:
     using KVP = KeyValuePair<K, V>;
     using DoubleLinkedList<KVP>::insertLast;
-    using typename DoubleLinkedList<KVP>::Iterator;
 public:
+    using typename DoubleLinkedList<KVP>::Iterator;
+    using DoubleLinkedList<KVP>::begin;
+    using DoubleLinkedList<KVP>::end;
+
     bool contains(K const& key) const {
         for(KVP const& kvp : *this)
             if (kvp.key == key)

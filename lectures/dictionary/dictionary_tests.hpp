@@ -54,6 +54,8 @@ TEST_CASE_TEMPLATE("Добавяне на всички числа от 1 до 10
         CHECK(dict.add(std::to_string(i), i));
     for (int i = 100; i >= 1; i--)
         CHECK_EQ(dict.lookup(std::to_string(i)), i);
+    for(KeyValuePair<std::string, int> const& kvp : dict)
+        CHECK_EQ(kvp.key, std::to_string(kvp.value));
     for (int i = 1; i <= 100; i++)
         CHECK(dict.remove(std::to_string(i)));
     for (int i = 1; i <= 100; i++)

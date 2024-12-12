@@ -18,7 +18,32 @@ private:
             collectKeys(keys, +pos);
         }
     }
+
+    // лоша бърза реализация на begin() / end()
+    DoubleLinkedList<KVP> kvps;
+
+    void collectKVP(Position const& pos) {
+        if (pos) {
+            collectKVP(-pos);
+            kvps.insertLast(*pos);
+            collectKVP(+pos);
+        }
+    }
+
 public:
+    using Iterator = typename DoubleLinkedList<KVP>::Iterator;
+
+    Iterator begin() {
+        kvps = DoubleLinkedList<KVP>();
+        collectKVP(this->rootPos());
+        return kvps.begin();
+    }
+
+    Iterator end() const {
+        return kvps.end();
+    }
+
+
     bool contains(K const& key) const {
         return this->exists(key);
     }
