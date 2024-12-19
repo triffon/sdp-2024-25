@@ -9,7 +9,7 @@ template <typename V>
 class Graph : HashTable<V, Set<V, HashTable>> {
 public:
     using VertexSet = Set<V, HashTable>;
-    using VS = KeyValuePair<V, VertexSet>;
+    using VertexSuccessors = KeyValuePair<V, VertexSet>;
 private:
     using D = HashTable<V, VertexSet>;
 

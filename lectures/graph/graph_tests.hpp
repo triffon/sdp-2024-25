@@ -49,7 +49,7 @@ TEST_CASE("Създаване на пълен граф с 10 върха") {
         for(int j = 0; j < 10; j++)
             CHECK(g.isEdge(i, j));
     int su = 0;
-    for(Graph<int>::VS const& vs : g) {
+    for(Graph<int>::VertexSuccessors const& vs : g) {
         int const& u = vs.key;
         su += u;
         Graph<int>::VertexSet const& succs = vs.value;
