@@ -8,12 +8,12 @@
 template <typename V>
 class Graph : HashTable<V, Set<V, HashTable>> {
 public:
-    using SuccessorSet = Set<V, HashTable>;
-    using VS = KeyValuePair<V, SuccessorSet>;
+    using VertexSet = Set<V, HashTable>;
+    using VS = KeyValuePair<V, VertexSet>;
 private:
-    using D = HashTable<V, SuccessorSet>;
+    using D = HashTable<V, VertexSet>;
 
-    SuccessorSet& successors(V const& v) {
+    VertexSet& successors(V const& v) {
         return D::lookup(v);
     }
 public:
@@ -22,7 +22,7 @@ public:
     using D::begin;
     using D::end;
 
-    SuccessorSet const& successors(V const& v) const {
+    VertexSet const& successors(V const& v) const {
         return D::lookup(v);
     }
 
@@ -31,7 +31,7 @@ public:
     }
 
     bool addVertex(V const& v) {
-        return D::add(v, SuccessorSet());
+        return D::add(v, VertexSet());
     }
 
     bool removeVertex(V const& v) {

@@ -32,7 +32,7 @@ TEST_CASE("Създаване на пълен граф с 10 върха") {
     for(Graph<int>::VS const& vs : g) {
         int const& u = vs.key;
         su += u;
-        Graph<int>::SuccessorSet const& succs = vs.value;
+        Graph<int>::VertexSet const& succs = vs.value;
         int s = 0;
         for(int v : succs)
             s += v;
