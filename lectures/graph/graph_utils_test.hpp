@@ -46,3 +46,28 @@ TEST_CASE("В тестовия граф единственият връх без
         CHECK_EQ(v, 4);
     CHECK(result.contains(4));
 }
+
+TEST_CASE("В тестовия граф родителите на 3 са 1 и 2") {
+    Graph<int> g = testGraph();
+    Graph<int>::VertexSet result = GraphUtils<int>::parents(g, 3);
+    CHECK(result.contains(1));
+    CHECK(result.contains(2));
+    for(int v : result)
+        CHECK((v == 1 || v == 2));
+}
+
+TEST_CASE("В пълен граф родителите на всеки връх са всички останали върхове") {
+    Graph<int> g;
+    for(int i = 0; i < 10; i++)
+        g.addVertex(i);
+    for(int i = 0; i < 10; i++)
+        for(int j = 0; j < 10; j++)
+            if (i != j)
+                g.addEdge(i, j);
+    for(int i = 0; i < 10; i++) {
+        Graph<int>::VertexSet result = GraphUtils<int>::parents(g, i);
+        for(int j = 0; j < 10; j++)
+            if (i != j)
+                CHECK(result.contains(j));
+    }
+}
