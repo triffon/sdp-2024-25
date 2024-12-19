@@ -14,6 +14,7 @@ public:
     using typename DoubleLinkedList<KVP>::Iterator;
     using DoubleLinkedList<KVP>::begin;
     using DoubleLinkedList<KVP>::end;
+    using DoubleLinkedList<KVP>::empty;
 
     bool contains(K const& key) const {
         for(KVP const& kvp : *this)

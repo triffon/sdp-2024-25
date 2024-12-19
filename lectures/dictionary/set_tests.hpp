@@ -1,8 +1,10 @@
 #include "doctest.h"
 #include "set.hpp"
 #include "associative_list.hpp"
+#include "bst_dictionary.hpp"
+#include "hash_table.hpp"
 
-#define SETS Set<int, AssociativeList>
+#define SETS Set<int, AssociativeList>, Set<int, BSTDictionary>, Set<int, HashTable>
 
 TEST_CASE_TEMPLATE("Създаване на празно множество", Set, SETS) {
     Set set;

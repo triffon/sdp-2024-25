@@ -9,7 +9,7 @@ template <typename K>
 using HashFunction = size_t (*)(K const&);
 
 template <typename K>
-K id(K const& x) { return x; }
+size_t id(K const& x) { return x; }
 
 template <typename K, typename V>
 class HashTableIterator {
@@ -228,6 +228,8 @@ public:
     Iterator end() const {
         return Iterator(table[capacity], table + capacity);
     }
+
+    bool empty() const { return buckets == 0; }
 };
 
 #endif // __HASH_TABLE_HPP

@@ -31,6 +31,7 @@ private:
     }
 
 public:
+    using BinaryTree<KVP>::empty;
     using Iterator = typename DoubleLinkedList<KVP>::Iterator;
 
     Iterator begin() {

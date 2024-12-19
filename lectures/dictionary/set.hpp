@@ -9,11 +9,7 @@ class Set : Dictionary<T, bool> {
 public:
     using D::remove;
     using D::contains;
-
-    bool empty() const {
-        return !D::begin();
-    }
-
+    using D::empty;
     bool insert(T const& x) {
         return D::add(x, false);
     }
