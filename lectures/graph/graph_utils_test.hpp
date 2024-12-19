@@ -71,3 +71,30 @@ TEST_CASE("В пълен граф родителите на всеки връх 
                 CHECK(result.contains(j));
     }
 }
+
+TEST_CASE("Пълният и празният граф са симетрични") {
+    Graph<int> g;
+    CHECK(GraphUtils<int>::isSymmetric(g));
+    for(int i = 0; i < 10; i++)
+        g.addVertex(i);
+    CHECK(GraphUtils<int>::isSymmetric(g));
+    for(int i = 0; i < 10; i++)
+        for(int j = 0; j < 10; j++)
+            g.addEdge(i, j);
+    CHECK(GraphUtils<int>::isSymmetric(g));
+}
+
+TEST_CASE("Тестовият граф не е симетричен, но след добавяне на обратните ребра става симетричен") {
+    Graph<int> g = testGraph();
+    CHECK(!GraphUtils<int>::isSymmetric(g));
+    g.addEdge(2, 1);
+    g.addEdge(3, 2);
+    g.addEdge(3, 1);
+    g.addEdge(4, 3);
+    g.addEdge(5, 3);
+    g.addEdge(4, 5);
+    g.addEdge(6, 5);
+    g.addEdge(2, 5);
+    g.addEdge(2, 6);
+    CHECK(GraphUtils<int>::isSymmetric(g));
+}
