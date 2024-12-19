@@ -39,7 +39,7 @@ public:
     }
 
     bool addEdge(V const& u, V const& v) {
-        return successors(u).insert(v);
+        return D::contains(u) && D::contains(v) && successors(u).insert(v);
     }
 
     bool removeEdge(V const& u, V const& v) {

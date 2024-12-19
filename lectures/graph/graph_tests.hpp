@@ -17,6 +17,26 @@ TEST_CASE("Създаване на празен граф с 10 върха") {
             CHECK(!g.isEdge(i, j));
 }
 
+TEST_CASE("Опит за повторно добавяне на връх се проваля") {
+    Graph<int> g;
+    CHECK(g.addVertex(1));
+    CHECK(!g.addVertex(1));
+}
+
+TEST_CASE("Опит за повторно добавяне на ребро се проваля") {
+    Graph<int> g;
+    g.addVertex(1);
+    g.addVertex(2);
+    CHECK(g.addEdge(1, 2));
+    CHECK(!g.addEdge(1, 2));
+}
+
+TEST_CASE("Опит за добавяне на ребро към несъществуващ връх се проваля") {
+    Graph<int> g;
+    g.addVertex(1);
+    CHECK(!g.addEdge(1, 2));
+}
+
 TEST_CASE("Създаване на пълен граф с 10 върха") {
     Graph<int> g;
     for(int i = 0; i < 10; i++)
