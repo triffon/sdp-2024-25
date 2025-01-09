@@ -3,6 +3,8 @@
 #include "graph.hpp"
 #include "graph_utils.hpp"
 
+#define STRATEGIES DFS<int>
+
 Graph<int> testGraph() {
     Graph<int> g;
     for(int i = 1; i <= 6; i++)
@@ -97,4 +99,38 @@ TEST_CASE("Тестовият граф не е симетричен, но сле
     g.addEdge(2, 5);
     g.addEdge(2, 6);
     CHECK(GraphUtils<int>::isSymmetric(g));
+}
+
+bool isPath(Graph<int> const& g, Path<int> const& path) {
+    if (path.empty())
+        return false;
+    Path<int>::Iterator it = path.begin();
+    while(it.next() && g.isEdge(*it, *it.next()))
+        ++it;
+    return !it.next();
+}
+
+TEST_CASE_TEMPLATE("Има път от 1 до всеки друг връх в тестовия граф", Strategy, STRATEGIES) {
+    Graph<int> g = testGraph();
+    for(int i = 2; i <= 6; i++)
+        CHECK(isPath(g, Strategy::findPath(g, 1, i)));
+}
+
+TEST_CASE_TEMPLATE("Има път от 1 до всеки друг връх в тестовия граф", Strategy, STRATEGIES) {
+    Graph<int> g = testGraph();
+    for(int i = 2; i <= 6; i++)
+        CHECK(isPath(g, Strategy::findPath(g, 1, i)));
+}
+
+TEST_CASE_TEMPLATE("Няма път до 1 от всеки друг връх в тестовия граф", Strategy, STRATEGIES) {
+    Graph<int> g = testGraph();
+    for(int i = 2; i <= 6; i++)
+        CHECK(!isPath(g, Strategy::findPath(g, i, 1)));
+}
+
+TEST_CASE_TEMPLATE("Няма път от 4 до всеки друг връх в тестовия граф", Strategy, STRATEGIES) {
+    Graph<int> g = testGraph();
+    for(int i = 1; i <= 6; i++)
+        if (i != 4)
+            CHECK(!isPath(g, Strategy::findPath(g, 4, i)));
 }

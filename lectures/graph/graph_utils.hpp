@@ -1,6 +1,11 @@
 #ifndef GRAPH_UTILS_HPP
 #define GRAPH_UTILS_HPP
 
+#include "linked_list.hpp"
+
+template <typename V>
+using Path = LinkedList<V>;
+
 template <typename V>
 class GraphUtils {
     using G = Graph<V>;
@@ -35,6 +40,52 @@ public:
         }
         return true;
     }
+
 };
+
+template <typename V>
+class DFS {
+private:
+    using G = Graph<V>;
+    using VS = typename G::VertexSet;
+    using P = Path<V>;
+
+    static bool findPath(G const& g, V const& u, V const& v, VS& visited, P& path) {
+        // лошо дъно
+        if (visited.contains(u))
+            // зациклихме
+            return false;
+
+        path.insertLast(u);
+        visited.insert(u);
+
+        // хубаво дъно
+        if (u == v)
+            // намерихме път
+            return true;
+
+        for(V const& w : g.successors(u))
+            // успешна ли е стъпката напред?
+            if (findPath(g, w, v, visited, path))
+                return true;
+
+        // стъпка назад: махаме върха от пътя
+        V tmp;
+        path.deleteLast(tmp);
+
+        return false;
+    }
+
+public:
+    static P findPath(G const& g, V const& u, V const& v) {
+        VS visited;
+        P path;
+        findPath(g, u, v, visited, path);
+        return path;
+    }
+
+};
+
+
 
 #endif // GRAPH_UTILS_HPP
