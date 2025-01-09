@@ -2,6 +2,7 @@
 #define GRAPH_UTILS_HPP
 
 #include "linked_list.hpp"
+#include "linked_queue.hpp"
 
 template <typename V>
 using Path = LinkedList<V>;
@@ -87,5 +88,51 @@ public:
 };
 
 
+template <typename V>
+class BFS {
+private:
+    using G = Graph<V>;
+    using VS = typename G::VertexSet;
+    using P = Path<V>;
+public:
+    static P findPath(G const& g, V const& u, V const& v) {
+        using Q = LinkedQueue<V>;
+        using ParentDictionary = HashTable<V, V>;
+
+        ParentDictionary pd;
+        Q queue;
+        VS visited;
+        P path;
+
+        queue.enqueue(u);
+        V current = u;
+
+        while (!queue.empty() && current != v) {
+            current = queue.dequeue();
+            // маркираме текущия връх като посетен
+            visited.insert(current);
+
+            if (current != v)
+                for(V const& w : g.successors(current))
+                    if (!visited.contains(w)) {
+                        // добавяме го в опашката за посещение
+                        queue.enqueue(w);
+                        // записваме си реброто current -> w
+                        if (!pd.contains(w))
+                            // за първи път обхождаме w
+                            pd.add(w, current);
+                    }
+        }
+        // q.empty() || current == v
+        if (current == v) {
+            // намерили сме път, сега трябва да го възстановим
+            path.insertFirst(current);
+            while (current != u)
+                path.insertFirst(current = pd.lookup(current));
+        }
+        
+        return path;
+    }
+};
 
 #endif // GRAPH_UTILS_HPP

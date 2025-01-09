@@ -3,7 +3,7 @@
 #include "graph.hpp"
 #include "graph_utils.hpp"
 
-#define STRATEGIES DFS<int>
+#define STRATEGIES DFS<int>, BFS<int>
 
 Graph<int> testGraph() {
     Graph<int> g;
