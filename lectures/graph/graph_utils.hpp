@@ -77,6 +77,28 @@ private:
         return false;
     }
 
+    static void findPathsFrom(G const& g, V const& u, VS& visited, P& path, LinkedList<P>& paths) {
+        // лошо дъно
+        if (visited.contains(u))
+            // зациклихме
+            return;
+
+        path.insertLast(u);
+        visited.insert(u);
+
+        // намерихме нов път
+        paths.insertLast(path);
+
+        for(V const& w : g.successors(u))
+            // стъпка напред
+            findPathsFrom(g, w, visited, path, paths);
+
+        // стъпка назад: махаме върха от пътя
+        V tmp;
+        path.deleteLast(tmp);
+        visited.remove(u);
+    }
+
 public:
     static P findPath(G const& g, V const& u, V const& v) {
         VS visited;
@@ -85,6 +107,13 @@ public:
         return path;
     }
 
+    static LinkedList<P> findPathsFrom(G const& g, V const& u) {
+        VS visited;
+        P path;
+        LinkedList<P> paths;
+        findPathsFrom(g, u, visited, path, paths);
+        return paths;
+    }
 };
 
 
