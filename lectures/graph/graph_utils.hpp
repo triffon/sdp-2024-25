@@ -42,6 +42,23 @@ public:
         return true;
     }
 
+    // O(|V| + |E|)
+    static bool findSource(G const& g, V& source) {
+        VS children;
+        VS vertices;
+        for(VSS const& vss : g) {
+            vertices.insert(vss.key);
+            for(V const& v : vss.value)
+                children.insert(v);
+        }
+        for (V const& v : vertices)
+            if (!children.contains(v)) {
+                source = v;
+                return true;
+            }
+        return false;
+    }
+
 };
 
 template <typename V>
@@ -99,6 +116,22 @@ private:
         visited.remove(u);
     }
 
+    static void spanningTree(G const& g, V const& u, VS& visited, G& st) {
+        visited.insert(u);
+
+        for(V const& w : g.successors(u))
+            // стъпка напред
+            // посетили ли сме този връх?
+            if (!visited.contains(w)) {
+                // добавяме го в дървото, както и реброто, по което идваме в него
+                st.addVertex(w);
+                st.addEdge(u, w);
+                // продължаваме обхождането в дълбочина
+                spanningTree(g, w, visited, st);
+            }
+    }
+
+
 public:
     static P findPath(G const& g, V const& u, V const& v) {
         VS visited;
@@ -113,6 +146,17 @@ public:
         LinkedList<P> paths;
         findPathsFrom(g, u, visited, path, paths);
         return paths;
+    }
+
+    // допускаме, че графът е силно свързан
+    static G spanningTree(G const& g) {
+        // започваме от първия (произволен) връх
+        V u = (*g.begin()).key;
+        VS visited;
+        G st;
+        st.addVertex(u);
+        spanningTree(g, u, visited, st);
+        return st;
     }
 };
 
@@ -190,6 +234,37 @@ public:
             }
         }
         return paths;
+    }
+
+    static G spanningTree(G const& g) {
+        using Q = LinkedQueue<V>;
+
+        Q queue;
+        VS visited;
+        G st;
+
+        V u = (*g.begin()).key;
+
+        queue.enqueue(u);
+        visited.insert(u);
+        V current = u;
+        st.addVertex(u);
+
+        while (!queue.empty()) {
+            current = queue.dequeue();
+
+            for(V const& w : g.successors(current))
+                if (!visited.contains(w)) {
+                    // добавяме го в опашката за посещение
+                    queue.enqueue(w);
+                    // маркираме го като посетен
+                    visited.insert(w);
+                    // записваме си реброто current -> w
+                    st.addVertex(w);
+                    st.addEdge(current, w);
+                }
+        }
+        return st;
     }
 };
 

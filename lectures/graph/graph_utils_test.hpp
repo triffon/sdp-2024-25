@@ -1,5 +1,6 @@
 #include "doctest.h"
 
+#include <fstream>
 #include "graph.hpp"
 #include "graph_utils.hpp"
 
@@ -43,6 +44,8 @@ TEST_CASE("В пълен граф от 10 върха няма върхове б�
 
 TEST_CASE("В тестовия граф единственият връх без деца е 4") {
     Graph<int> g = testGraph();
+    std::ofstream dotFile("testGraph.dot");
+    g.printDOT(dotFile);
     Graph<int>::VertexSet result = GraphUtils<int>::childless(g);
     for(int v : result)
         CHECK_EQ(v, 4);
@@ -144,4 +147,17 @@ TEST_CASE_TEMPLATE("Намираме всички ациклични пътищ�
         count++;
     }
     CHECK_EQ(count, 14);
+}
+
+TEST_CASE_TEMPLATE("Коректно намираме покриващо дърво на тестовия граф", Strategy, STRATEGIES) {
+    Graph<int> g = testGraph();
+    // правим графа силно свързан
+    g.addEdge(4, 1);
+    Graph<int> spanningTree = Strategy::spanningTree(g);
+    // CHECK_EQ(spanningTree.numberOfVertices(), 6);
+    // CHECK_EQ(spanningTree.numberOfEdges(), 5);
+    std::ofstream dotFile("spanningTree.dot");
+    spanningTree.printDOT(dotFile);
+    for(int i = 2; i <= 6; i++)
+        CHECK(isPath(spanningTree, Strategy::findPath(spanningTree, 1, i)));
 }

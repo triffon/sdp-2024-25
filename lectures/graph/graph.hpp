@@ -45,6 +45,17 @@ public:
     bool removeEdge(V const& u, V const& v) {
         return D::contains(u) && D::contains(v) && successors(u).remove(v);
     }
+
+    void printDOT(std::ostream& os = std::cout) const {
+        os << "digraph Graph {" << std::endl;
+        for(VertexSuccessors const& vss : *this) {
+            V const& u = vss.key;
+            for(V const& v : vss.value)
+                os << '"' << u << "\" -> \"" << v << '"' << std::endl;
+        }
+        os << "}" << std::endl;
+    }
+
 };
 
 #endif // GRAPH_HPP
