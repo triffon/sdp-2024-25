@@ -27,7 +27,7 @@ public:
     }
 
     bool isEdge(V const& u, V const& v) const {
-        return successors(u).contains(v);
+        return D::contains(u) && D::contains(v) && successors(u).contains(v);
     }
 
     bool addVertex(V const& v) {
@@ -43,7 +43,7 @@ public:
     }
 
     bool removeEdge(V const& u, V const& v) {
-        return successors(u).remove(v);
+        return D::contains(u) && D::contains(v) && successors(u).remove(v);
     }
 };
 
