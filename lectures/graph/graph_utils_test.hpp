@@ -154,10 +154,19 @@ TEST_CASE_TEMPLATE("Коректно намираме покриващо дър�
     // правим графа силно свързан
     g.addEdge(4, 1);
     Graph<int> spanningTree = Strategy::spanningTree(g);
-    // CHECK_EQ(spanningTree.numberOfVertices(), 6);
-    // CHECK_EQ(spanningTree.numberOfEdges(), 5);
+    int root = -1;
+    CHECK(GraphUtils<int>::findSource(spanningTree, root));
+    int countVertices = 0;
+    int countEdges = 0;
+    for(Graph<int>::VertexSuccessors const& vss : spanningTree) {
+        countVertices++;
+        for(int v : vss.value)
+            countEdges++;
+    }
+    CHECK_EQ(countVertices, 6);
+    CHECK_EQ(countEdges, 5);
     std::ofstream dotFile("spanningTree.dot");
     spanningTree.printDOT(dotFile);
-    for(int i = 2; i <= 6; i++)
-        CHECK(isPath(spanningTree, Strategy::findPath(spanningTree, 1, i)));
+    for(int i = 1; i <= 6; i++)
+        CHECK(isPath(spanningTree, Strategy::findPath(spanningTree, root, i)));
 }
