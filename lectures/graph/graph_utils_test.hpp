@@ -135,7 +135,7 @@ TEST_CASE_TEMPLATE("Няма път от 4 до всеки друг връх в 
             CHECK(!isPath(g, Strategy::findPath(g, 4, i)));
 }
 
-TEST_CASE_TEMPLATE("Намираме всички ациклични пътища, започващи от 1 в тестовия граф", Strategy, DFS<int>) {
+TEST_CASE_TEMPLATE("Намираме всички ациклични пътища, започващи от 1 в тестовия граф", Strategy, STRATEGIES) {
     Graph<int> g = testGraph();
     LinkedList<Path<int>> paths = Strategy::findPathsFrom(g, 1);
     int count = 0;

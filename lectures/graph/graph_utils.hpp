@@ -162,6 +162,35 @@ public:
         
         return path;
     }
+
+    static LinkedList<P> findPathsFrom(G const& g, V const& u) {
+        LinkedList<P> paths;
+        VS visited;
+        P path;
+
+        path.insertLast(u);
+        paths.insertLast(path);
+
+        for(P const& currentPath : paths) {
+            V const& current = *currentPath.last();
+
+            for(V const& w : g.successors(current)) {
+                // проверяваме дали w го няма вече в currentPath
+                typename P::Iterator pathIt = currentPath.begin();
+                while (pathIt && *pathIt != w)
+                    ++pathIt;
+                if (!pathIt) {
+                    // w го няма в currentPath!
+                    // слагаме го накрая на пътя
+                    P newPath = currentPath;
+                    newPath.insertLast(w);
+                    // добавяме новия път за обхождане
+                    paths.insertLast(newPath);
+                }
+            }
+        }
+        return paths;
+    }
 };
 
 #endif // GRAPH_UTILS_HPP
