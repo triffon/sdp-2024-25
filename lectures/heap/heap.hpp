@@ -21,15 +21,16 @@ class Heap {
                     ? left(index) : right(index);
     }
 
+    // O(log n)
     void siftDown(size_t index) {
-        while(left(index) < size) {
-            int nextIndex = maxChildIndex(index);
+        int nextIndex;
+        while(left(index) < size && heap[nextIndex = maxChildIndex(index)] > heap[index]) {
             std::swap(heap[index], heap[nextIndex]);
             index = nextIndex;
         }
     }
 
-
+    // O(log n)
     void siftUp(size_t index) {
         while (index > 0 && heap[index] > heap[parent(index)]) {
             std::swap(heap[index], heap[parent(index)]);
@@ -39,6 +40,16 @@ class Heap {
 
 public:
     Heap() : size(0) {}
+
+    // инициализация с произволен масив
+    // O(n)
+    Heap(T array[], size_t _size) : size(_size) {
+        for(int i = 0; i < size; i++)
+            heap[i] = array[i];
+
+        for(int i = size / 2 - 1; i >= 0; i-- )
+            siftDown(i);
+    }
 
     size_t getSize() const { return size; }
 
@@ -63,6 +74,15 @@ public:
     }
 
     T head() const { return heap[0]; }
+
+    void toSorted(T array[]) {
+        int index = size - 1;
+        while(size > 0) {
+            array[index--] = heap[0];
+            heap[0] = heap[--size];
+            siftDown(0);
+        }
+    }
 };
 
 #endif // HEAP_HPP
