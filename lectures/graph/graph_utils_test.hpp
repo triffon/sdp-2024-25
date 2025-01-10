@@ -182,7 +182,7 @@ TEST_CASE("Пресмятаме правилно входящите степен
     CHECK_EQ(inDegrees.lookup(6), 1);
 }
 
-TEST_CASE_TEMPLATE("Проверяваме, че topologicalSort подрежда всеки ръб u->v с u преди v в testGraph", Strategy, BFS<int>) {
+TEST_CASE_TEMPLATE("Проверяваме, че topologicalSort подрежда всеки ръб u->v с u преди v в testGraph", Strategy, STRATEGIES) {
     Graph<int> g = testGraph();
     // правим графа ацикличен
     g.removeEdge(2, 3);
@@ -204,7 +204,7 @@ TEST_CASE_TEMPLATE("Проверяваме, че topologicalSort подрежд�
     }
 }
 
-TEST_CASE_TEMPLATE("Проверяваме topologicalSort върху малък ацикличен граф", Strategy, BFS<int>) {
+TEST_CASE_TEMPLATE("Проверяваме topologicalSort върху малък ацикличен граф", Strategy, STRATEGIES) {
     Graph<int> g;
     for(int i = 1; i <= 4; i++)
         g.addVertex(i);
@@ -227,3 +227,9 @@ TEST_CASE_TEMPLATE("Проверяваме topologicalSort върху малък
     CHECK(indices.lookup(2) < indices.lookup(3));
     CHECK(indices.lookup(3) < indices.lookup(4));
 }
+
+TEST_CASE_TEMPLATE("topologicalSort хвърля изключение при цикличен граф ", Strategy, STRATEGIES) {
+    Graph<int> g = testGraph();
+    CHECK_THROWS_AS(Strategy::topologicalSort(g), std::runtime_error);
+}
+

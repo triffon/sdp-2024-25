@@ -1,6 +1,8 @@
 #ifndef GRAPH_UTILS_HPP
 #define GRAPH_UTILS_HPP
 
+#include <unordered_map>
+#include <unordered_set>
 #include "linked_list.hpp"
 #include "linked_queue.hpp"
 
@@ -98,6 +100,7 @@ class DFS {
 private:
     using G = Graph<V>;
     using VS = typename G::VertexSet;
+    using VSS = typename G::VertexSuccessors;
     using P = Path<V>;
 
     static bool findPath(G const& g, V const& u, V const& v, VS& visited, P& path) {
@@ -189,6 +192,34 @@ public:
         st.addVertex(u);
         spanningTree(g, u, visited, st);
         return st;
+    }
+
+    static void topologicalSort(G const& g, V const& u, VS& visited, VS& marked, LinkedList<V>& result) {
+        if (visited.contains(u))
+            throw std::runtime_error("Графът е цикличен!");
+        if (marked.contains(u))
+            return;
+        
+        visited.insert(u);
+
+        for(V const& v : g.successors(u))
+            topologicalSort(g, v, visited, marked, result);
+
+        visited.remove(u);
+        marked.insert(u);
+        result.insertFirst(u);
+    }
+
+    static LinkedList<V> topologicalSort(G const& g) {
+        VS visited;
+        VS marked;
+        LinkedList<V> result;
+        
+        for(VSS const& vss : g)
+            if (!marked.contains(vss.key))
+                topologicalSort(g, vss.key, visited, marked, result);
+        
+        return result;
     }
 };
 
@@ -299,6 +330,7 @@ public:
         return st;
     }
 
+
     static LinkedList<V> topologicalSort(G const& g) {
         HashTable<V, int> inDegrees = GraphUtils<int>::findIncomingDegrees(g);
         LinkedList<V> result;
@@ -309,6 +341,10 @@ public:
             for(V const& v : g.successors(u))
                 if (--inDegrees.lookup(v) == 0)
                     result.insertLast(v);
+
+        for (KeyValuePair<int, int> const& kvp : inDegrees)
+            if (kvp.value > 0)
+                throw std::runtime_error("Графът е цикличен!");
         return result;
     }
 };
