@@ -59,6 +59,38 @@ public:
         return false;
     }
 
+    // O(|V| + |E|)
+    static LinkedList<V> findSources(G const& g) {
+        VS children;
+        VS vertices;
+        LinkedList<V> result;
+        for(VSS const& vss : g) {
+            vertices.insert(vss.key);
+            for(V const& v : vss.value)
+                children.insert(v);
+        }
+        for (V const& v : vertices)
+            if (!children.contains(v))
+                result.insertLast(v);
+
+        return result;
+    }
+
+    // O(|V| + |E|)
+    static HashTable<V, int> findIncomingDegrees(G const& g) {
+        HashTable<V, int> result;
+        // инициализираме степените с 0
+        for(VSS& vss : g)
+            result.add(vss.key, 0);
+
+        for(VSS const& vss : g)
+            for(V const& v : vss.value)
+                result.lookup(v)++;
+
+        return result;
+    }
+
+
 };
 
 template <typename V>
@@ -265,6 +297,19 @@ public:
                 }
         }
         return st;
+    }
+
+    static LinkedList<V> topologicalSort(G const& g) {
+        HashTable<V, int> inDegrees = GraphUtils<int>::findIncomingDegrees(g);
+        LinkedList<V> result;
+        for(KeyValuePair<V, int> const& kvp : inDegrees)
+            if (kvp.value == 0)
+                result.insertLast(kvp.key);
+        for(V const& u : result)
+            for(V const& v : g.successors(u))
+                if (--inDegrees.lookup(v) == 0)
+                    result.insertLast(v);
+        return result;
     }
 };
 

@@ -170,3 +170,60 @@ TEST_CASE_TEMPLATE("Коректно намираме покриващо дър�
     for(int i = 1; i <= 6; i++)
         CHECK(isPath(spanningTree, Strategy::findPath(spanningTree, root, i)));
 }
+
+TEST_CASE("Пресмятаме правилно входящите степени на тестовия граф") {
+    Graph<int> g = testGraph();
+    HashTable<int, int> inDegrees = GraphUtils<int>::findIncomingDegrees(g);
+    CHECK_EQ(inDegrees.lookup(1), 0);
+    CHECK_EQ(inDegrees.lookup(2), 3);
+    CHECK_EQ(inDegrees.lookup(3), 2);
+    CHECK_EQ(inDegrees.lookup(4), 2);
+    CHECK_EQ(inDegrees.lookup(5), 1);
+    CHECK_EQ(inDegrees.lookup(6), 1);
+}
+
+TEST_CASE_TEMPLATE("Проверяваме, че topologicalSort подрежда всеки ръб u->v с u преди v в testGraph", Strategy, BFS<int>) {
+    Graph<int> g = testGraph();
+    // правим графа ацикличен
+    g.removeEdge(2, 3);
+    LinkedList<int> sorted = Strategy::topologicalSort(g);
+
+    // Създаваме речник, пазещ индексите на всеки връх в сортирането
+    HashTable<int, int> indices;
+    int pos = 0;
+    for(int v : sorted)
+        indices.add(v, pos++);
+    
+    CHECK_EQ(pos, 6);
+
+    // За всяко ребро проверяваме дали индекс(u) < индекс(v)
+    for(auto const& vs : g) {
+        for(int succ : vs.value) {
+            CHECK(indices.lookup(vs.key) < indices.lookup(succ));
+        }
+    }
+}
+
+TEST_CASE_TEMPLATE("Проверяваме topologicalSort върху малък ацикличен граф", Strategy, BFS<int>) {
+    Graph<int> g;
+    for(int i = 1; i <= 4; i++)
+        g.addVertex(i);
+    // Правим граф 1 -> 2 -> 3 -> 4
+    g.addEdge(1, 2);
+    g.addEdge(2, 3);
+    g.addEdge(3, 4);
+
+    LinkedList<int> sorted = Strategy::topologicalSort(g);
+
+    HashTable<int, int> indices;
+    int pos = 0;
+    for(int v : sorted)
+        indices.add(v, pos++);
+    
+    CHECK_EQ(pos, 4);
+
+    // Проверяваме реда
+    CHECK(indices.lookup(1) < indices.lookup(2));
+    CHECK(indices.lookup(2) < indices.lookup(3));
+    CHECK(indices.lookup(3) < indices.lookup(4));
+}
