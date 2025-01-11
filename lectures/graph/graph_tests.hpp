@@ -60,3 +60,41 @@ TEST_CASE("Създаване на пълен граф с 10 върха") {
     }
     CHECK_EQ(su, 45);
 }
+
+TEST_CASE("Опит за изтриване на несъществуващ връх се проваля") {
+    Graph<int> g;
+    SUBCASE("Опит за изтриване на връх в празен граф се проваля") {
+        CHECK(!g.removeVertex(1));
+    }
+    SUBCASE("Опит за изтриване на връх в граф с един елемент се проваля") {
+        g.addVertex(1);
+        CHECK(!g.removeVertex(2));
+    }
+}
+
+TEST_CASE("Изтриване на съществуващ връх в граф") {
+    Graph<int> g;
+    for (int i = 0; i < 5; ++i)
+        g.addVertex(i);
+    SUBCASE("Изтриване на връх без родители") {
+        g.addEdge(0,3);
+        CHECK(g.removeVertex(0));
+        CHECK_THROWS(g.isEdge(0,3));
+        for (Graph<int>::Iterator it = g.begin(); it != g.end(); ++it)
+            CHECK((*it).key != 0);
+    }
+    SUBCASE("Изтриване на връх с поне един родител") {
+        g.addEdge(1,4);
+        g.addEdge(1,0);
+        g.addEdge(3,0);
+        g.addEdge(0,3);
+        CHECK(g.removeVertex(0));
+        CHECK(g.isEdge(1,4));
+        CHECK(!g.isEdge(1,0));
+        CHECK(!g.isEdge(3,0));
+        CHECK_THROWS(g.isEdge(0,3));
+        CHECK(static_cast<Graph<int> const&>(g).successors(3).empty());
+        CHECK(static_cast<Graph<int> const&>(g).successors(1).contains(4));
+        CHECK(!static_cast<Graph<int> const&>(g).successors(1).contains(0));
+    }
+}

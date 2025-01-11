@@ -35,7 +35,12 @@ public:
     }
 
     bool removeVertex(V const& v) {
-        throw std::runtime_error("За домашно");
+        if (!this->remove(v)) return false;
+
+        for (HashTableIterator it = begin(); it != end(); ++it) {
+            (*it).value.remove(v);
+        }
+        return true;
     }
 
     bool addEdge(V const& u, V const& v) {
