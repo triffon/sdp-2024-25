@@ -342,7 +342,7 @@ public:
                 if (--inDegrees.lookup(v) == 0)
                     result.insertLast(v);
 
-        for (KeyValuePair<int, int> const& kvp : inDegrees)
+        for (KeyValuePair<V, int> const& kvp : inDegrees)
             if (kvp.value > 0)
                 throw std::runtime_error("Графът е цикличен!");
         return result;
