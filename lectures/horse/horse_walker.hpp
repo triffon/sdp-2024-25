@@ -25,7 +25,8 @@ public:
             board.push_back(ChessRow(size));
     }
     virtual Walk walk(Position const& start, Position const& end) = 0;
-
+    
+    virtual Walk walkAvoidingPositions(Position const& start, Position const& end, const std::vector<Position>& forbidden) = 0;
 
     static bool isValidStep(Position const& from, Position const& to) {
         return std::abs((from.first - to.first) * (from.second - to.second)) == 2;

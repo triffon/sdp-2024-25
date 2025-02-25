@@ -62,6 +62,81 @@ public:
 
         return Walk();
     }
+
+    Walk walkAvoidingPositions(Position const& start, Position const& end, 
+                            const std::vector<Position>& forbidden) {
+        // Reset the board
+        for (size_t i = 0; i < board.size(); ++i)
+            for (size_t j = 0; j < board[i].size(); ++j)
+                board[i][j] = false;
+        
+        // Mark forbidden positions as visited
+        for (const auto& pos : forbidden) {
+            if (insideBoard(pos)) {
+                board[pos.first][pos.second] = true;
+            }
+        }
+        
+        // Check if start or end positions are forbidden
+        if (std::find(forbidden.begin(), forbidden.end(), start) != forbidden.end() ||
+            std::find(forbidden.begin(), forbidden.end(), end) != forbidden.end()) {
+            return Walk();
+        }
+        
+        // Reset forbidden status for start and end if they were marked
+        board[start.first][start.second] = false;
+        
+        // Initialize stack with start position
+        currentWalk.clear();
+        LinkedStack<Position> posStack;
+        posStack.push(start);
+        
+        while (!posStack.empty()) {
+            Position current = posStack.peek();
+            
+            // Mark current position as visited
+            board[current.first][current.second] = true;
+            currentWalk.push_back(current);
+            
+            // If we've reached the end, return the walk
+            if (current == end) {
+                return currentWalk;
+            }
+            
+            // Flag to track if we found any valid next move
+            bool foundNextMove = false;
+            
+            // Try all possible knight moves
+            for (int i = -2; i <= 2; i++) {
+                for (int j = -2; j <= 2; j++) {
+                    if (i != 0 && j != 0 && std::abs(i) != std::abs(j)) {
+                        Position next = {current.first + i, current.second + j};
+                        if (insideBoard(next) && !board[next.first][next.second]) {
+                            // Found a valid move, add to stack and process it next
+                            posStack.push(next);
+                            foundNextMove = true;
+                            break;
+                        }
+                    }
+                }
+                if (foundNextMove) break;
+            }
+            
+            // If no valid move was found, backtrack
+            if (!foundNextMove) {
+                posStack.pop();
+                currentWalk.pop_back();
+                
+                // If we're not at the start position, mark the previous position as unvisited
+                if (!currentWalk.empty()) {
+                    board[current.first][current.second] = false;
+                }
+            }
+        }
+        
+        // No path found
+        return Walk();
+    }
 };
 
 #endif // STACK_HORSE_WALKER_HPP

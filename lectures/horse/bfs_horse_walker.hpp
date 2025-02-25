@@ -35,11 +35,9 @@ public:
         }
 
         // Reset the board
-        for (size_t i = 0; i < board.size(); i++) {
-            for (size_t j = 0; j < board[i].size(); j++) {
+        for (size_t i = 0; i < board.size(); ++i)
+            for (size_t j = 0; j < board[i].size(); ++j)
                 board[i][j] = false;
-            }
-        }
 
         // Queue for BFS
         LinkedQueue<Position> queue;
@@ -100,6 +98,77 @@ public:
         }
         
         return path;
+    }
+
+    Walk walkAvoidingPositions(Position const& start, Position const& end, 
+                              const std::vector<Position>& forbidden) {
+        // Reset the board
+        for (size_t i = 0; i < board.size(); ++i)
+            for (size_t j = 0; j < board[i].size(); ++j)
+                board[i][j] = false;
+        
+        // Mark forbidden positions as visited
+        for (const auto& pos : forbidden) {
+            if (insideBoard(pos)) {
+                board[pos.first][pos.second] = true;
+            }
+        }
+        
+        // Check if start or end is forbidden
+        if (std::find(forbidden.begin(), forbidden.end(), start) != forbidden.end() ||
+            std::find(forbidden.begin(), forbidden.end(), end) != forbidden.end()) {
+            return Walk();
+        }
+        
+        // Reset forbidden status for start and end if needed
+        board[start.first][start.second] = false;
+        board[end.first][end.second] = false;
+        
+        // Initialize the BFS
+        LinkedQueue<Position> q;
+        std::map<Position, Position> parent;
+        
+        // Mark start as visited and add to queue
+        board[start.first][start.second] = true;
+        q.enqueue(start);
+        
+        // Define knight's possible moves
+        const int moveX[] = {-2, -2, -1, -1, 1, 1, 2, 2};
+        const int moveY[] = {-1, 1, -2, 2, -2, 2, -1, 1};
+        
+        // BFS traversal
+        while (!q.empty()) {
+            Position current = q.dequeue();
+            
+            // Check if we've reached the target
+            if (current == end) {
+                // Reconstruct the path
+                Walk result;
+                Position pos = end;
+                while (!(pos == start)) {
+                    result.push_back(pos);
+                    pos = parent[pos];
+                }
+                result.push_back(start);
+                std::reverse(result.begin(), result.end());
+                return result;
+            }
+            
+            // Try all possible knight moves
+            for (int i = 0; i < 8; i++) {
+                Position next = {current.first + moveX[i], current.second + moveY[i]};
+                
+                // Check if the move is valid and the position hasn't been visited
+                if (insideBoard(next) && !board[next.first][next.second]) {
+                    board[next.first][next.second] = true;
+                    q.enqueue(next);
+                    parent[next] = current;
+                }
+            }
+        }
+        
+        // No path found
+        return Walk();
     }
 };
 
