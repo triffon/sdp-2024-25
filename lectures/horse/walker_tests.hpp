@@ -1,8 +1,9 @@
 #include "doctest.h"
 #include "recursive_horse_walker.hpp"
 #include "stack_horse_walker.hpp"
+#include "bfs_horse_walker.hpp"
 
-#define ALL_WALKERS RecursiveHorseWalker, StackHorseWalker
+#define ALL_WALKERS RecursiveHorseWalker, StackHorseWalker, BFSHorseWalker
 
 TEST_CASE_TEMPLATE("Ход на коня от (0,0) до (0,2) в дъска с размер 4", SomeWalker, ALL_WALKERS) {
     SomeWalker walker(4);
