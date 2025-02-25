@@ -99,7 +99,7 @@ TEST_CASE_TEMPLATE("Testing walkAvoidingPositions", SomeWalker, ALL_WALKERS) {
         Position end = {2, 1};
         std::vector<Position> forbidden;
         Walk walk = walker.walkAvoidingPositions(start, end, forbidden);
-        CHECK(isValidWalk(walk, start, end, forbidden, boardSize));
+        CHECK(HorseWalker::isValidWalk(walk, start, end, forbidden, boardSize));
     }
     
     SUBCASE("Path with one forbidden position") {
@@ -107,7 +107,7 @@ TEST_CASE_TEMPLATE("Testing walkAvoidingPositions", SomeWalker, ALL_WALKERS) {
         Position end = {3, 3};
         std::vector<Position> forbidden = {{1, 2}};
         Walk walk = walker.walkAvoidingPositions(start, end, forbidden);
-        CHECK(isValidWalk(walk, start, end, forbidden, boardSize));
+        CHECK(HorseWalker::isValidWalk(walk, start, end, forbidden, boardSize));
     }
     
     // ... Add other subcases similarly ...
